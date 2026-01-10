@@ -5,10 +5,15 @@ What a team charter usually includes
 Purpose & goals – Why the team exists and what success looks like
 Scope – What is in‑scope and out‑of‑scope for the team
 Roles & responsibilities – Who does what
+
 Team Charter
-Project Name: _______________________________
+Project Name: Team 1s Web App
 
 Team Members:
+1. Quantis
+2.
+3.
+4.
 
 1. Our Team’s Goal
 What are we trying to accomplish together?
@@ -17,6 +22,6 @@ What are we trying to accomplish together?
 Each person will help by doing the following:
 
 Roles	Name	Responsibility
-
+Leader  Quantis Guides the team and manages the repository.
 
 Other		
