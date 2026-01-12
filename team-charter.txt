@@ -11,9 +11,9 @@ Project Name: Team 1s Web App
 
 Team Members:
 1. Quantis
-2.
-3.
-4.
+2. Elida
+3.Thaina
+4.Anthony
 
 1. Our Team’s Goal
 What are we trying to accomplish together?
@@ -23,5 +23,6 @@ Each person will help by doing the following:
 
 Roles	Name	Responsibility
 Leader  Quantis Guides the team and manages the repository.
+
 
 Other		
