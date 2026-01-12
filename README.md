@@ -2,7 +2,7 @@
 # [Project Name]
 
 ## Overview
-[Project Name] is a [short description: e.g., Flask web app / API / school project] created to [main goal: e.g., manage tasks, analyze data, provide an endpoint, etc.].  
+[Project Name WE NEED DECIDE] is a [short description: e.g., Flask web app / API / school project] created to [main goal: e.g., manage tasks, analyze data, provide an endpoint, etc.].  
 This repository contains the source code, setup instructions, and documentation needed to run the project locally.
 
 ---
@@ -125,9 +125,7 @@ git remote -v
 
 # Steps to Install Flask
 
-1
-2
-3
+
 
 **Step 1: Install Python**
 
