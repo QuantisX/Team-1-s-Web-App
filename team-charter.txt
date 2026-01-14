@@ -7,22 +7,28 @@ Scope – What is in‑scope and out‑of‑scope for the team
 Roles & responsibilities – Who does what
 
 Team Charter
-Project Name: Team 1s Web App
+Project Name: Healthy Habit Tracker
 
 Team Members:
 1. Quantis
 2. Elida
 3.Thaina
 4.Anthony
+5. Sesilina
 
 1. Our Team’s Goal
 What are we trying to accomplish together?
+Develop the Healthy Habit tracker app
 
 2. Team Roles
 Each person will help by doing the following:
 
 Roles	Name	Responsibility
-Leader  Quantis Guides the team and manages the repository.
+Junior Dev  Quantis Guides the team and manages the repository.
+Junior Dev Thaina
+Junior Dev Sesilina
+Junior Dev Elida
+Junior Dev Anthony
 
 
 Other		
