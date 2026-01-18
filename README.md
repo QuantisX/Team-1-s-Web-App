@@ -1,5 +1,3 @@
-
-
 # Healthy Habits Tracker (Flask)
 
 ## Overview
