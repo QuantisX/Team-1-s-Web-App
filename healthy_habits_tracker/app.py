@@ -33,4 +33,4 @@ with app.app_context():
 
 @app.get("/")
 def home():
-    return "DB ready! Check the instance/app.db file."
+    return "Flask is running! DB ready! Check the instance/app.db file."
