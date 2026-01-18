@@ -2,6 +2,11 @@ from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from pathlib import Path
 
+APP_NAME = "Healthy Habits Tracker"
+APP_VERSION = "1.0.0"
+APP_DESCRIPTION = "A Flask web app to track daily healthy habits (gym, water, healthy food)."
+
+
 app = Flask(__name__)
 app.config["SECRET_KEY"] = "dev-secret"
 
