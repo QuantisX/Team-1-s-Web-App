@@ -26,10 +26,12 @@ The group’s purpose is to:
 
 ### Team Members
 
-* **Quantis** — Backend / API / Database
-* **Elida** — Frontend / UI / Templates
-* **Thaina** — Testing / Documentation
-* **Anthony** — Project Manager / Integration
+* **Quantis** 
+* **Elida**
+* **Thaina** 
+* **Anthony** 
+* **Sesilina**
+
 
 ---
 
