@@ -1,73 +1,105 @@
 
-# [Project Name]
+
+# Healthy Habits Tracker (Flask)
 
 ## Overview
-[Project Name] is a [short description: e.g., Flask web app / API / school project] created to [main goal: e.g., manage tasks, analyze data, provide an endpoint, etc.].  
-This repository contains the source code, setup instructions, and documentation needed to run the project locally.
+
+**Healthy Habits Tracker** is a Flask web application (school group project) that helps users track daily healthy habits such as:
+
+* Going to the gym
+* Drinking water
+* Eating healthy food
+
+Users can select a day, submit their habits, and view a list of all submitted days. The project is built with **Python + Flask** and can be extended later with statistics and charts.
 
 ---
 
 ## What This Group Is For
-This project was built by a group to collaborate on planning, development, testing, and documentation.  
-The group’s purpose is to:
-- split responsibilities (backend, frontend, testing, documentation)
-- review each other’s code (pull requests, code reviews)
-- keep the project organized using issues/tasks
-- ensure consistent quality, structure, and deadlines
 
-**Team Members**
-- Quantis — [Role: e.g., Backend / API / Database]??
-- Elida— [Role: e.g., Frontend / UI]??
-- Thaina — [Role: e.g., Testing / Documentation]??
-- Anthony — [Role: e.g., Project Manager / Integration]??
+This project was built by a group to collaborate on planning, development, testing, and documentation.
+The group’s purpose is to:
+
+* split responsibilities (backend, frontend, testing, documentation)
+* review each other’s code (pull requests, code reviews)
+* keep the project organized using issues/tasks
+* ensure consistent quality, structure, and deadlines
+
+### Team Members
+
+* **Quantis** — Backend / API / Database
+* **Elida** — Frontend / UI / Templates
+* **Thaina** — Testing / Documentation
+* **Anthony** — Project Manager / Integration
 
 ---
 
 ## Tech Stack
-- Python
-- Flask
-- Git + GitHub
-- [Optional: SQLite/PostgreSQL, HTML/CSS, React, etc.]
+
+* Python 3.x
+* Flask
+* Flask-SQLAlchemy (SQLite database)
+* HTML/CSS (Jinja templates)
+* Git + GitHub
+* (Optional) Chart.js for progress charts
+
+---
+
+## Project Structure
+
+Your repo should look like this (venv is NOT committed to GitHub):
+
+```txt
+Team-1-s-Web-App/
+├─ healthy_habits_tracker/
+│  ├─ app.py
+│  ├─ requirements.txt
+│  ├─ templates/
+│  │  ├─ base.html
+│  │  ├─ index.html
+│  │  ├─ add_edit.html
+│  │  └─ detail.html
+│  ├─ static/
+│  │  └─ style.css
+│  └─ instance/
+│     └─ app.db   (auto-created)
+├─ .gitignore
+└─ README.md
+```
 
 ---
 
 ## Prerequisites
-- A computer with Windows, macOS, or Linux
-- Internet access
-- Admin permissions to install software
+
+* Windows, macOS, or Linux
+* Internet access
+* Python installed (recommended: Python 3.10+)
+* Git installed
 
 ---
 
 # Step-by-Step: Install Git
 
 ## Windows (Git for Windows)
-1. Download Git from the official website: https://git-scm.com/downloads
-2. Run the installer.
-3. Recommended options during install:
-   - Keep default settings (safe choice)
-   - Choose **"Git from the command line and also from 3rd-party software"**
-4. After installation, open **PowerShell** or **Command Prompt** and verify:
+
+1. Download Git: [https://git-scm.com/downloads](https://git-scm.com/downloads)
+2. Run the installer
+3. Recommended option: **"Git from the command line and also from 3rd-party software"**
+4. Verify:
+
    ```bash
    git --version
-````
+   ```
 
 ## macOS
 
 **Option A (recommended): Homebrew**
 
-1. Install Homebrew (if needed): [https://brew.sh/](https://brew.sh/)
-2. Install Git:
+```bash
+brew install git
+git --version
+```
 
-   ```bash
-   brew install git
-   ```
-3. Verify:
-
-   ```bash
-   git --version
-   ```
-
-**Option B:** Install Xcode Command Line Tools
+**Option B: Xcode Command Line Tools**
 
 ```bash
 xcode-select --install
@@ -84,33 +116,13 @@ git --version
 
 ---
 
-# Step-by-Step: Clone a GitHub Repository
+# Step-by-Step: Clone the Repository
 
-## 1) Copy the Repo URL
-
-On GitHub:
-
-1. Open the repository page
-2. Click **Code**
-3. Copy the **HTTPS** URL (easy) or **SSH** URL (advanced)
-
-## 2) Clone in your Terminal
-
-Go to the folder where you want the project:
-
-```bash
-cd path/to/your/folder
-```
-
-Clone the repository:
+1. Copy the repo URL from GitHub → **Code** → HTTPS
+2. Clone and enter the folder:
 
 ```bash
 git clone https://github.com/QuantisX/Team-1-s-Web-App.git
-```
-
-Enter the project folder:
-
-```bash
 cd Team-1-s-Web-App
 ```
 
@@ -123,110 +135,169 @@ git remote -v
 
 ---
 
-# Steps to Install Flask
+# Step-by-Step: Set Up Python + Flask (Virtual Environment)
 
-1
-2
-3
+## Windows (PowerShell)
 
-**Step 1: Install Python**
+From the repo root (`Team-1-s-Web-App/`):
 
-Ensure Python is installed on your system. Download the latest version from the official Python website if not already installed.
+```powershell
+# Create venv (do NOT commit this folder)
+python -m venv myproject
 
-During installation, check the box to Add Python to PATH.
+# Activate venv
+myproject\Scripts\Activate.ps1
 
-**Step 2: Install virtualenv**
+# Install dependencies
+pip install -r healthy_habits_tracker\requirements.txt
+```
 
-Open a terminal or command prompt.
+## macOS/Linux
 
-Run the command: pip install virtualenv.
-
-**Step 3: Create a Virtual Environment**
-
-Navigate to the directory where you want to create your project.
-
-Run the following command: On Windows: python -m venv myproject On macOS/Linux: python3 -m venv myproject
-
-Replace myproject with your desired virtual environment name.
-
-**Step 4: Activate the Virtual Environment**
-
-Activate the environment: On Windows: myproject\Scripts\activate On macOS/Linux: source myproject/bin/activate
-
-The terminal prompt will change to indicate the virtual environment is active.
-
-**Step 5: Install Flask**
-
-With the virtual environment activated, run the command: pip install Flask.
-
-**Step 6: Verify Installation**
-
-Run the command: python -m flask --version.
-
-If Flask's version is displayed, the installation is successful.
+```bash
+python3 -m venv myproject
+source myproject/bin/activate
+pip install -r healthy_habits_tracker/requirements.txt
+```
 
 ---
 
-## Running the Project (Example)
+## requirements.txt (example)
 
-> Update these commands to match your project structure.
+Make sure your `healthy_habits_tracker/requirements.txt` includes at least:
 
-### Windows (PowerShell)
-
-```bash
-# inside your repo folder
-python -m venv venv
-venv\Scripts\activate
-pip install -r requirements.txt
-
-# set Flask app (example)
-set FLASK_APP=app.py
-set FLASK_ENV=development
-flask run
+```txt
+Flask
+Flask-SQLAlchemy
 ```
 
-### macOS/Linux
+If you don’t have it yet, you can generate it after installing packages:
 
 ```bash
-# inside your repo folder
-python3 -m venv venv
-source venv/bin/activate
-pip install -r requirements.txt
-
-# set Flask app (example)
-export FLASK_APP=app.py
-export FLASK_ENV=development
-flask run
+pip freeze > healthy_habits_tracker/requirements.txt
 ```
 
-Open in your browser:
+---
+
+# Running the Project
+
+## Windows (PowerShell)
+
+From the repo root:
+
+```powershell
+myproject\Scripts\Activate.ps1
+flask --app healthy_habits_tracker/app.py run
+```
+
+## macOS/Linux
+
+```bash
+source myproject/bin/activate
+flask --app healthy_habits_tracker/app.py run
+```
+
+Open in browser:
 
 * [http://127.0.0.1:5000](http://127.0.0.1:5000)
 
 ---
 
-## Project Structure (Example)
+# How the Database (instance/app.db) Is Auto-Created
+
+The SQLite database file **`app.db`** is created automatically when:
+
+1. The app config points to SQLite, and
+2. The app runs `db.create_all()` to create the tables.
+
+### Minimum example (what app.py should include)
+
+Your `healthy_habits_tracker/app.py` should have logic like this:
+
+* Ensure the instance folder exists
+* Configure SQLite
+* Create tables at startup
+
+```python
+from pathlib import Path
+from flask import Flask
+from flask_sqlalchemy import SQLAlchemy
+
+app = Flask(__name__)
+app.config["SECRET_KEY"] = "dev"
+
+# Ensure instance folder exists
+Path(app.instance_path).mkdir(parents=True, exist_ok=True)
+
+# This creates the DB inside the instance folder
+app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///app.db"
+app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
+
+db = SQLAlchemy(app)
+
+class HabitEntry(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    # add fields here...
+
+with app.app_context():
+    db.create_all()
+```
+
+After running Flask once, you should see:
 
 ```txt
-[Project Name]/
-├─ app.py
-├─ requirements.txt
-├─ README.md
-├─ templates/
-├─ static/
-└─ ...
+healthy_habits_tracker/instance/app.db
+```
+
+---
+
+# Important: Do NOT Push the Virtual Environment to GitHub
+
+Your virtual environment folder (example: `myproject/`) must be ignored.
+
+Create a `.gitignore` in the repo root:
+
+```gitignore
+# Virtual environments
+myproject/
+venv/
+.venv/
+env/
+
+# Python cache
+__pycache__/
+*.pyc
+
+# DB files (do not commit local databases)
+healthy_habits_tracker/instance/*.db
+```
+
+### If you already tracked the venv by mistake
+
+```powershell
+git rm -r --cached myproject
+git commit -m "Ignore venv folder"
+git push
 ```
 
 ---
 
 ## Common Issues & Fixes
 
-### "python is not recognized" (Windows)
+### “Could not locate a Flask application”
+
+Run Flask with the correct path:
+
+```bash
+flask --app healthy_habits_tracker/app.py run
+```
+
+### “python is not recognized” (Windows)
 
 * Reinstall Python and check **Add Python to PATH**
-* Close and reopen the terminal
+* Restart terminal
 
-### "pip not found"
+### “pip not found”
 
 ```bash
 python -m ensurepip --upgrade
@@ -235,28 +306,26 @@ python -m pip install --upgrade pip
 
 ### Port already in use
 
-Run Flask on another port:
-
 ```bash
-flask run --port 5001
+flask --app healthy_habits_tracker/app.py run --port 5001
 ```
 
 ---
 
 ## Contributing (Team Workflow)
 
-1. Create a new branch:
+1. Create a branch:
 
    ```bash
    git checkout -b feature/your-feature-name
    ```
-2. Make changes and commit:
+2. Commit changes:
 
    ```bash
    git add .
    git commit -m "Describe your change"
    ```
-3. Push branch:
+3. Push:
 
    ```bash
    git push origin feature/your-feature-name
@@ -267,22 +336,9 @@ flask run --port 5001
 
 ## License
 
-Copyright (c) 2026 [Full Name or Organization]
+MIT License (or course-required license)
 
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
+Copyright (c) 2026
+Permission is hereby granted, free of charge, to any person obtaining a copy of this software...
+*(keep the standard MIT text if your class allows it)*
 
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
