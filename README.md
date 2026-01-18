@@ -25,10 +25,11 @@ The group’s purpose is to:
 ### Team Members
 
 * **Quantis** 
-* **Elida** 
+* **Elida**
 * **Thaina** 
 * **Anthony** 
 * **Sesilina**
+
 
 ---
 
