@@ -26,7 +26,7 @@ Each person will help by doing the following:
 Roles	Name	Responsibility
 Junior Dev  Quantis Guides the team and manages the repository.
 Junior Dev Thaina Milestone 4 — Styling (CSS / UX)
-Junior Dev Sesilina
+Junior Dev Sesilina Milestone 5 - Evolution/Stats
 Junior Dev Elida
 Junior Dev Anthony
 
