@@ -1,6 +1,7 @@
 ## Healthy Habits Tracker (Flask)
 
 Overview
+
 Healthy Habits Tracker is a Flask web application (school group project) that helps users track daily healthy habits such as:
 
 Going to the gym
