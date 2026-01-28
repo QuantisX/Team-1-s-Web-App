@@ -103,9 +103,13 @@ HTML/CSS (Jinja templates)
 Git + GitHub
 (Optional) Chart.js for progress charts
 
-Project Structure
+---
+
+## Project Structure
+
 Your repo should look like this (venv is NOT committed to GitHub):
 
+```txt
 Team-1-s-Web-App/
 ├─ healthy_habits_tracker/
 │  ├─ app.py
@@ -121,7 +125,9 @@ Team-1-s-Web-App/
 │     └─ app.db   (auto-created)
 ├─ .gitignore
 └─ README.md
+```
 
+---
 Prerequisites
 Windows, macOS, or Linux
 Internet access
