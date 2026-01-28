@@ -80,7 +80,6 @@ In Sprint 3, the team aims to complete a working MVP that can be run locally by 
 8. As a team member, I want tasks split into issues so we can work in parallel and review each other’s work.
 
 ---
----
 
 ## What This Group Is For
 
