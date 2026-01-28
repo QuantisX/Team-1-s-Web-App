@@ -107,8 +107,6 @@ Git + GitHub
 
 ## Project Structure
 
-Your repo should look like this (venv is NOT committed to GitHub):
-
 ```txt
 Team-1-s-Web-App/
 ├─ healthy_habits_tracker/
