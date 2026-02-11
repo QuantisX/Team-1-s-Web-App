@@ -14,7 +14,7 @@ app.config["SECRET_KEY"] = "dev-secret"
 Path(app.instance_path).mkdir(parents=True, exist_ok=True)
 
 
-app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///app.db"
+app.config["SQLALCHEMY_DATABASE_URI"] = f"sqlite:///{Path(app.instance_path) / 'app.db'}"
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 
 db = SQLAlchemy(app)
@@ -34,3 +34,6 @@ with app.app_context():
 @app.get("/")
 def home():
     return "Flask is running! DB ready! Check the instance/app.db file."
+
+if __name__ == "__main__":
+    app.run(debug=True)
