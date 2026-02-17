@@ -11,10 +11,16 @@ Project Name: Healthy Habit Tracker
 
 Team Members:
 1. Quantis
+<<<<<<< HEAD
 2. Elida
 3.Thaina
 4.Anthony
 5. Sesilina
+=======
+2.
+3. Thaina 
+4.
+>>>>>>> f719713 (Add .gitignore and update team charter)
 
 1. Our Team’s Goal
 What are we trying to accomplish together?

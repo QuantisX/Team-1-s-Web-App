@@ -1,9 +1,14 @@
+<<<<<<< HEAD
 # Virtual environments
+=======
+#   Virtual enviroments
+>>>>>>> f719713 (Add .gitignore and update team charter)
 myproject/
 venv/
 .venv/
 env/
 
+<<<<<<< HEAD
 # Python cache
 __pycache__/
 *.pyc
@@ -14,6 +19,18 @@ __pycache__/
 Thumbs.db
 
 # Flask / SQLite
+=======
+#   Python  cache
+__pycache__/
+*.pyc 
+*.pyo 
+
+#   OS files
+.DS_Store
+Thumbs.db
+
+#   Flash  /   SQLite
+>>>>>>> f719713 (Add .gitignore and update team charter)
 *.db
 instance/
 .gitignore.local
