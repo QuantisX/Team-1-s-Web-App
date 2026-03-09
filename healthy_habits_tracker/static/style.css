@@ -1,7 +1,4 @@
-/* ============================================
-   Healthy Habits Tracker â€” style.css
-   Clean wellness theme: greens, whites, soft shadows
-   ============================================ */
+
 
 /* ---------- Reset & Base ---------- */
 *,
@@ -340,44 +337,140 @@ td:first-child {
     white-space: nowrap;
 }
 
-/* Water column â€” number styling */
+/* Water column — highlighted pill with icon */
 .water-count {
-    font-weight: 600;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    font-weight: 700;
     color: #0984e3;
     font-size: 1rem;
+    background-color: #e7f5ff;
+    padding: 0.3rem 0.85rem;
+    border-radius: 20px;
+}
+
+.water-count::before {
+    content: "💧";
+    font-size: 0.85rem;
 }
 
 .water-count::after {
     content: " cups";
     font-weight: 400;
-    font-size: 0.8rem;
-    color: #b2bec3;
+    font-size: 0.75rem;
+    color: #74b9ff;
 }
 
-/* Badges â€” yes/no indicators */
-.badge-yes {
-    display: inline-block;
-    background-color: #d4edda;
-    color: #155724;
-    padding: 0.25rem 0.75rem;
+/* Water level variants — optional color intensity */
+.water-count.water-low {
+    background-color: #ffeaa7;
+    color: #d68910;
+}
+
+.water-count.water-low::before {
+    content: "💧";
+}
+
+.water-count.water-good {
+    background-color: #e7f5ff;
+    color: #0984e3;
+}
+
+.water-count.water-great {
+    background-color: #d4f5ff;
+    color: #0652DD;
+}
+
+/* Habit Badges — icon + label pill style */
+.habit-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    padding: 0.3rem 0.8rem;
     border-radius: 20px;
     font-size: 0.8rem;
     font-weight: 600;
     letter-spacing: 0.02em;
+    white-space: nowrap;
+}
+
+.habit-badge-yes {
+    background-color: #d4edda;
+    color: #155724;
+}
+
+.habit-badge-yes::before {
+    content: "✅";
+    font-size: 0.75rem;
+}
+
+.habit-badge-no {
+    background-color: #f8d7da;
+    color: #721c24;
+}
+
+.habit-badge-no::before {
+    content: "❌";
+    font-size: 0.75rem;
+}
+
+/* Gym-specific badge icons */
+.habit-badge-gym.habit-badge-yes::before {
+    content: "🏋️";
+}
+
+.habit-badge-gym.habit-badge-no::before {
+    content: "❌";
+}
+
+/* Food-specific badge icons */
+.habit-badge-food.habit-badge-yes::before {
+    content: "🥗";
+}
+
+.habit-badge-food.habit-badge-no::before {
+    content: "❌";
+}
+
+/* Legacy badge support (backwards compatible) */
+.badge-yes {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    background-color: #d4edda;
+    color: #155724;
+    padding: 0.3rem 0.8rem;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+}
+
+.badge-yes::before {
+    content: "✅";
+    font-size: 0.75rem;
 }
 
 .badge-no {
-    display: inline-block;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
     background-color: #f8d7da;
     color: #721c24;
-    padding: 0.25rem 0.75rem;
+    padding: 0.3rem 0.8rem;
     border-radius: 20px;
     font-size: 0.8rem;
     font-weight: 600;
     letter-spacing: 0.02em;
 }
 
-/* Notes column â€” subtle, smaller text */
+.badge-no::before {
+    content: "❌";
+    font-size: 0.75rem;
+}
+
+/* Notes column — subtle, smaller text */
 .notes-text {
     font-size: 0.875rem;
     color: #636e72;
@@ -388,7 +481,7 @@ td:first-child {
 }
 
 .notes-text:empty::after {
-    content: "â€”";
+    content: "—";
     color: #dfe6e9;
 }
 
