@@ -5,6 +5,7 @@ from pathlib import Path
 #  ADDED (needed for graceful duplicate handling)
 from sqlalchemy.exc import IntegrityError
 from flask import request  # to read form data (POST)
+from flask import render_template #to render HTML templates
 
 APP_NAME = "Healthy Habits Tracker"
 APP_VERSION = "1.0.0"
@@ -37,7 +38,14 @@ with app.app_context():
 
 @app.get("/")
 def home():
-    return "Flask is running! DB ready! Check the instance/app.db file."
+    return render_template('base.html')
+    # return "Flask is running! DB ready! Check the instance/app.db file."
+
+
+@app.route("/stats", methods = ["GET"])
+def get_stats():
+    if request.method == "GET":
+        return render_template('stats.html')
 
 
 @app.route("/log", methods=["GET", "POST"])
