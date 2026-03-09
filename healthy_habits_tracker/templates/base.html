@@ -1,40 +1,54 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>{% block title %}Healthy Habits Tracker{% endblock %}</title>
-  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Healthy Habits Tracker{% endblock %}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
-  <nav class="navbar">
-    <div class="nav-brand">
-      <span class="nav-icon">🌿</span>
-      <a href="/">Healthy Habits Tracker</a>
-    </div>
-    <ul class="nav-links">
-      <li><a href="/" class="nav-link">Home</a></li>
-      <li><a href="/log" class="nav-link">Log Habits</a></li>
-      <li><a href="/stats" class = "nav-link">Stats</a></li>
-      <li><a href="/history" class="nav-link">History</a></li>
-      
-    </ul>
-  </nav>
+    <nav class="navbar">
+        <div class="nav-brand">
+            <span class="nav-icon">🌿</span>
+            <a href="/">Healthy Habits Tracker</a>
+        </div>
+        <ul class="nav-links">
+            <li><a href="/" class="nav-link">Home</a></li>
+            <li><a href="/log" class="nav-link">Log Habits</a></li>
+            <li><a href="/history" class="nav-link">History</a></li>
+        </ul>
+    </nav>
 
-  <main class="container">
-    {% with messages = get_flashed_messages(with_categories=true) %}
-      {% if messages %}
-        {% for category, message in messages %}
-          <div class="alert alert-{{ category }}">{{ message }}</div>
-        {% endfor %}
-      {% endif %}
-    {% endwith %}
+    <main class="container">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <div class="alert alert-{{ category }}">{{ message }}</div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
 
-    {% block content %}{% endblock %}
-  </main>
+        {% block content %}{% endblock %}
+    </main>
 
-  <footer class="footer">
-    <p>&copy; 2026 Healthy Habits Tracker — Built with Flask 🌱</p>
-  </footer>
+    <footer class="footer">
+        <p>&copy; 2026 Healthy Habits Tracker &mdash; Built with Flask 🌱</p>
+    </footer>
+
+    <script>
+        /* ---- ISSUE 21: Delete confirmation ---- */
+        document.addEventListener("DOMContentLoaded", function () {
+            document.querySelectorAll(".btn-delete").forEach(function (btn) {
+                btn.addEventListener("click", function (e) {
+                    var date = btn.getAttribute("data-date") || "this entry";
+                    if (!confirm("Are you sure you want to delete the entry for " + date + "?")) {
+                        e.preventDefault();
+                    }
+                });
+            });
+        });
+    </script>
+
+    {% block scripts %}{% endblock %}
 </body>
 </html>
