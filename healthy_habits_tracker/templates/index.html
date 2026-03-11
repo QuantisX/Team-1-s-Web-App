@@ -1,0 +1,36 @@
+<!-- templates/index.html -->
+{% extends "base.html" %}
+
+{% block content %}
+<h1>Habit Entries</h1>
+
+{% if entries %}
+<table>
+    <tr>
+        <th>Date</th>
+        <th>Gym</th>
+        <th>Water</th>
+        <th>Healthy Food</th>
+        <th>Actions</th>
+    </tr>
+
+    {% for e in entries %}
+    <tr>
+        <td>{{ e.date }}</td>
+        <td>{{ "Yes" if e.gym else "No" }}</td>
+        <td>{{ e.water }}</td>
+        <td>{{ "Yes" if e.healthy_food else "No" }}</td>
+        <td>
+            <a href="{{ url_for('detail', entry_id=e.id) }}">View</a>
+            <a href="{{ url_for('edit_entry', entry_id=e.id) }}">Edit</a>
+            <a href="{{ url_for('delete_entry', entry_id=e.id) }}">Delete</a>
+        </td>
+    </tr>
+    {% endfor %}
+</table>
+
+{% else %}
+<p>No entries yet.</p>
+{% endif %}
+
+{% endblock %}

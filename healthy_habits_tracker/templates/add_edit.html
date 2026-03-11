@@ -1,0 +1,26 @@
+<!-- templates/add_edit.html -->
+{% extends "base.html" %}
+
+{% block content %}
+<h1>{{ title }}</h1>
+
+<form method="POST">
+    <label>Date:</label>
+    <input type="date" name="date" value="{{ entry.date if entry else '' }}" required>
+
+    <label>Gym:</label>
+    <input type="checkbox" name="gym" {% if entry and entry.gym %}checked{% endif %}>
+
+    <label>Water (cups):</label>
+    <input type="number" name="water" min="0" value="{{ entry.water if entry else 0 }}">
+
+    <label>Healthy Food:</label>
+    <input type="checkbox" name="healthy_food" {% if entry and entry.healthy_food %}checked{% endif %}>
+
+    <label>Notes:</label>
+    <textarea name="notes">{{ entry.notes if entry else "" }}</textarea>
+
+    <button type="submit">Save</button>
+</form>
+
+{% endblock %}
