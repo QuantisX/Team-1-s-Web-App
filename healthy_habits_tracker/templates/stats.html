@@ -1,41 +1,328 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>{% block title %}Stats{% endblock %}</title>
-  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-</head>
-<body>
-  <nav class="navbar">
-    <div class="nav-brand">
-      <span class="nav-icon">🌿</span>
-      <a href="/">Healthy Habits Tracker</a>
+{% extends "base.html" %}
+{% block title %}Stats — Healthy Habits Tracker{% endblock %}
+
+{% block styles %}
+<style>
+  .sw { padding:0; background:#0a0a0f; min-height:100vh; }
+  .sh { padding:2.5rem 3rem 2rem; border-bottom:1px solid rgba(255,255,255,0.07); }
+  .se { font-size:0.7rem; font-weight:700; letter-spacing:3px; text-transform:uppercase; color:#4a8df5; margin-bottom:0.4rem; }
+  .st { font-family:'Bebas Neue',sans-serif; font-size:3.2rem; letter-spacing:2px; line-height:1; color:#f0eee8; margin:0; }
+  .st span { color:#4a8df5; }
+  .ss { color:#7e7c8a; margin-top:0.5rem; font-size:0.95rem; }
+
+  .kg { display:grid; grid-template-columns:repeat(auto-fit,minmax(155px,1fr)); gap:1rem; padding:2rem 3rem 0; }
+  .kc { background:#13131c; border:1px solid rgba(255,255,255,0.07); border-radius:14px; padding:1.3rem 1.4rem; }
+  .kl { font-size:0.67rem; font-weight:700; letter-spacing:1.5px; text-transform:uppercase; color:#7e7c8a; margin-bottom:0.35rem; }
+  .kv { font-family:'Bebas Neue',sans-serif; font-size:2.5rem; letter-spacing:1px; line-height:1; margin:0; color:#f0eee8; }
+  .kn { font-size:0.73rem; color:#7e7c8a; margin-top:3px; }
+  .br { border-color:rgba(224,66,58,0.3)!important; } .vr { color:#e0423a; }
+  .bb { border-color:rgba(74,141,245,0.3)!important; } .vb { color:#4a8df5; }
+  .bp { border-color:rgba(99,51,185,0.3)!important;  } .vp { color:#a78bfa; }
+  .bg { border-color:rgba(34,197,94,0.3)!important;  } .vg { color:#86efac; }
+  .by { border-color:rgba(234,179,8,0.3)!important;  } .vy { color:#fde047; }
+
+  .sr { display:grid; grid-template-columns:repeat(auto-fit,minmax(240px,1fr)); gap:1rem; padding:1.2rem 3rem 0; }
+  .sc { background:#13131c; border:1px solid rgba(255,255,255,0.07); border-radius:14px; padding:1.3rem 1.5rem; display:flex; align-items:center; gap:1rem; }
+  .si { width:48px; height:48px; border-radius:10px; display:flex; align-items:center; justify-content:center; flex-shrink:0; }
+  .sl { font-size:0.7rem; font-weight:700; letter-spacing:1px; text-transform:uppercase; color:#7e7c8a; }
+  .sv { font-family:'Bebas Neue',sans-serif; font-size:1.7rem; letter-spacing:1px; color:#f0eee8; line-height:1; }
+  .su { font-size:0.9rem; color:#7e7c8a; font-family:'Barlow',sans-serif; }
+  .sb { font-size:0.72rem; color:#5c5a66; margin-top:2px; }
+  .fl { font-size:1.6rem; margin-left:auto; }
+
+  .cg { display:grid; grid-template-columns:repeat(auto-fit,minmax(280px,1fr)); gap:1.2rem; padding:1.2rem 3rem 0; }
+  .cc { background:#13131c; border:1px solid rgba(255,255,255,0.07); border-radius:14px; padding:1.4rem 1.5rem; }
+  .cf { grid-column:1/-1; }
+  .ct { font-size:0.67rem; font-weight:700; letter-spacing:1.5px; text-transform:uppercase; color:#7e7c8a; }
+  .cs { font-size:0.75rem; color:#3a3a4a; margin:2px 0 1rem; }
+  .cb { position:relative; height:220px; }
+  .cb canvas { display:block; width:100%!important; height:220px!important; }
+
+  .rr { display:flex; gap:1.2rem; flex-wrap:wrap; padding:1.2rem 3rem 4rem; }
+  .rc { background:#13131c; border:1px solid rgba(255,255,255,0.07); border-radius:14px; padding:1.4rem 1.8rem; display:flex; flex-direction:column; align-items:center; gap:0.5rem; flex:1; min-width:140px; }
+  .rt { font-size:0.67rem; font-weight:700; letter-spacing:1.5px; text-transform:uppercase; color:#7e7c8a; }
+  .rw { position:relative; width:130px; height:130px; }
+  .ri { position:absolute; inset:0; display:flex; align-items:center; justify-content:center; }
+  .rp { font-family:'Bebas Neue',sans-serif; font-size:1.8rem; letter-spacing:1px; color:#f0eee8; }
+  .rh { font-size:0.72rem; color:#3a3a4a; }
+
+  .emp { display:flex; flex-direction:column; align-items:center; justify-content:center; padding:5rem 2rem; text-align:center; gap:1rem; }
+  .emp h2 { font-family:'Bebas Neue',sans-serif; font-size:2rem; color:#f0eee8; }
+  .emp p { color:#7e7c8a; }
+  .btn-red { background:#e0423a; color:#fff; padding:0.8rem 1.8rem; border-radius:8px; font-weight:700; text-transform:uppercase; letter-spacing:0.5px; text-decoration:none; font-size:0.88rem; font-family:'Barlow',sans-serif; }
+
+  @media(max-width:768px){
+    .kg,.sr,.cg,.rr{ padding-left:1rem; padding-right:1rem; }
+    .sh{ padding:2rem 1rem 1.5rem; }
+    .st{ font-size:2.5rem; }
+  }
+</style>
+{% endblock %}
+
+{% block content %}
+
+
+<div class="sw">
+  <div class="sh">
+    <p class="se">Your Progress</p>
+    <h1 class="st">HABIT <span>STATS</span></h1>
+    <p class="ss">Numbers don't lie. Here's how you've been doing.</p>
+  </div>
+
+{% if stats.total_days == 0 %}
+  <div class="emp">
+    <h2>No data yet</h2>
+    <p>Start logging habits to see your stats here.</p>
+    <a href="/log" class="btn-red">Log Your First Day</a>
+  </div>
+
+{% else %}
+
+  
+  <div class="kg">
+    <div class="kc">
+      <p class="kl">Total Days</p>
+      <p class="kv">{{ stats.total_days }}</p>
     </div>
-    <ul class="nav-links">
-      <li><a href="/" class="nav-link">Home</a></li>
-      <li><a href="/log" class="nav-link">Log Habits</a></li>
-      <li><a href="/stats" class = "nav-link">Stats</a></li>
-      <li><a href="/history" class="nav-link">History</a></li>
-      
-    </ul>
-  </nav>
-  <main class="container">
-    {% with messages = get_flashed_messages(with_categories=true) %}
-      {% if messages %}
-        {% for category, message in messages %}
-          <div class="alert alert-{{ category }}">{{ message }}</div>
-        {% endfor %}
-      {% endif %}
-    {% endwith %}
+    <div class="kc br">
+      <p class="kl">Exercise Days</p>
+      <p class="kv vr">{{ stats.exercise_count }}</p>
+      <p class="kn">{{ stats.exercise_pct }}% of days</p>
+    </div>
+    <div class="kc bb">
+      <p class="kl">Avg Water / Day</p>
+      <p class="kv vb">{{ stats.avg_water }}</p>
+      <p class="kn">cups</p>
+    </div>
+    <div class="kc bp">
+      <p class="kl">Avg Sleep</p>
+      <p class="kv vp">{{ stats.avg_sleep }}</p>
+      <p class="kn">hours / night</p>
+    </div>
+    <div class="kc bg">
+      <p class="kl">Healthy Food Days</p>
+      <p class="kv vg">{{ stats.healthy_count }}</p>
+      <p class="kn">{{ stats.healthy_pct }}% of days</p>
+    </div>
+    <div class="kc by">
+      <p class="kl">Avg Exercise</p>
+      <p class="kv vy">{{ stats.avg_exercise_min }}</p>
+      <p class="kn">min / day</p>
+    </div>
+  </div>
 
-    {% block content %}{% endblock %}
+  
+  <div class="sr">
+    <div class="sc">
+      <div class="si" style="background:rgba(224,66,58,0.15);">
+        <svg width="26" height="26" viewBox="0 0 26 26" fill="none">
+          <rect x="2" y="11" width="22" height="5" rx="2.5" fill="#e0423a"/>
+          <rect x="0" y="8" width="6" height="10" rx="2.5" fill="#e0423a"/>
+          <rect x="20" y="8" width="6" height="10" rx="2.5" fill="#e0423a"/>
+        </svg>
+      </div>
+      <div>
+        <p class="sl">Exercise Streak</p>
+        <p class="sv">{{ stats.exercise_streak }} <span class="su">days current</span></p>
+        <p class="sb">Best ever: {{ stats.exercise_best_streak }} days</p>
+      </div>
+      <span class="fl" id="ex-flame" data-streak="{{ stats.exercise_streak }}">🔥</span>
+    </div>
 
-    <h1>This is what our stats are looking like:</h1>
-  </main>
+    <div class="sc">
+      <div class="si" style="background:rgba(99,51,185,0.18);">
+        <svg width="26" height="26" viewBox="0 0 26 26" fill="none">
+          <path d="M13 3 Q19 9 19 16 A6 6 0 0 1 7 16 Q7 9 13 3Z" fill="#a78bfa"/>
+        </svg>
+      </div>
+      <div>
+        <p class="sl">Healthy Food Streak</p>
+        <p class="sv">{{ stats.food_streak }} <span class="su">days current</span></p>
+        <p class="sb">Best ever: {{ stats.food_best_streak }} days</p>
+      </div>
+      <span class="fl" id="food-flame" data-streak="{{ stats.food_streak }}">🔥</span>
+    </div>
+  </div>
 
-  <footer class="footer">
-    <p>&copy; 2026 Healthy Habits Tracker — Built with Flask 🌱</p>
-  </footer>
-</body>
-</html>
+
+  <div class="cg">
+    <div class="cc">
+      <p class="ct">WATER INTAKE — LAST 7 ENTRIES</p>
+      <p class="cs">Daily cups · dashed = goal (8)</p>
+      <div class="cb"><canvas id="waterChart"></canvas></div>
+    </div>
+    <div class="cc">
+      <p class="ct">SLEEP — LAST 7 ENTRIES</p>
+      <p class="cs">Hours per night · dashed = goal (7h)</p>
+      <div class="cb"><canvas id="sleepChart"></canvas></div>
+    </div>
+    <div class="cc cf">
+      <p class="ct">EXERCISE & HEALTHY FOOD — LAST 7 ENTRIES</p>
+      <p class="cs">Hit = 1 · Missed = 0</p>
+      <div class="cb"><canvas id="habitChart"></canvas></div>
+    </div>
+  </div>
+
+  <div class="rr">
+    <div class="rc">
+      <p class="rt">EXERCISE</p>
+      <div class="rw">
+        <canvas id="exRing" width="130" height="130"></canvas>
+        <div class="ri"><span class="rp">{{ stats.exercise_pct }}%</span></div>
+      </div>
+    </div>
+    <div class="rc">
+      <p class="rt">CLEAN EATING</p>
+      <div class="rw">
+        <canvas id="foodRing" width="130" height="130"></canvas>
+        <div class="ri"><span class="rp">{{ stats.healthy_pct }}%</span></div>
+      </div>
+    </div>
+    <div class="rc">
+      <p class="rt">HYDRATION GOAL</p>
+      <div class="rw">
+        <canvas id="waterRing" width="130" height="130"></canvas>
+        <div class="ri"><span class="rp">{{ stats.water_goal_pct }}%</span></div>
+      </div>
+      <p class="rh">≥ 8 cups / day</p>
+    </div>
+  </div>
+
+{% endif %}
+</div>
+
+
+<div id="cd"
+  data-labels='{{ chart_labels | tojson }}'
+  data-water='{{ chart_water | tojson }}'
+  data-exercise='{{ chart_exercise | tojson }}'
+  data-food='{{ chart_food | tojson }}'
+  data-sleep='{{ chart_sleep | tojson }}'
+  data-ep="{{ stats.exercise_pct }}"
+  data-fp="{{ stats.healthy_pct }}"
+  data-wg="{{ stats.water_goal_pct }}"
+  style="display:none;"></div>
+
+<script>
+function initCharts() {
+
+  /* flame opacity */
+  ['ex-flame','food-flame'].forEach(function(id) {
+    var el = document.getElementById(id);
+    if (el) el.style.opacity = Number(el.dataset.streak) >= 5 ? '1' : '0.15';
+  });
+
+  var cd = document.getElementById('cd');
+  if (!cd) return;
+
+  var labels   = JSON.parse(cd.dataset.labels);
+  var wData    = JSON.parse(cd.dataset.water);
+  var exData   = JSON.parse(cd.dataset.exercise);
+  var fData    = JSON.parse(cd.dataset.food);
+  var sData    = JSON.parse(cd.dataset.sleep);
+  var exPct    = Number(cd.dataset.ep);
+  var foodPct  = Number(cd.dataset.fp);
+  var wGoal    = Number(cd.dataset.wg);
+
+  if (!labels.length) return; /* no data, skip charts */
+
+  Chart.defaults.color       = '#7e7c8a';
+  Chart.defaults.font.family = "'Barlow', sans-serif";
+  Chart.defaults.font.size   = 12;
+
+  var grid = 'rgba(255,255,255,0.06)';
+  var tick = '#5c5a66';
+
+  function goalLine(val, color) {
+    return {
+      id: 'gl'+val,
+      afterDraw: function(chart) {
+        var ctx = chart.ctx, ca = chart.chartArea, y = chart.scales.y;
+        if (!ca) return;
+        var yp = y.getPixelForValue(val);
+        ctx.save();
+        ctx.setLineDash([5,4]);
+        ctx.strokeStyle = color;
+        ctx.lineWidth = 1.5;
+        ctx.beginPath(); ctx.moveTo(ca.left, yp); ctx.lineTo(ca.right, yp); ctx.stroke();
+        ctx.restore();
+      }
+    };
+  }
+
+
+  new Chart(document.getElementById('waterChart'), {
+    type: 'bar',
+    data: { labels: labels, datasets: [{ label: 'Cups', data: wData,
+      backgroundColor: 'rgba(74,141,245,0.65)', borderColor: '#4a8df5',
+      borderWidth: 1, borderRadius: 6 }]},
+    options: { responsive: true, maintainAspectRatio: false,
+      plugins: { legend: { display: false }},
+      scales: {
+        x: { grid: { color: grid }, ticks: { color: tick }},
+        y: { grid: { color: grid }, ticks: { color: tick }, min: 0, suggestedMax: 12 }
+      }},
+    plugins: [goalLine(8, 'rgba(74,141,245,0.4)')]
+  });
+
+  
+  new Chart(document.getElementById('sleepChart'), {
+    type: 'line',
+    data: { labels: labels, datasets: [{ label: 'Hours', data: sData,
+      borderColor: '#a78bfa', backgroundColor: 'rgba(99,51,185,0.15)',
+      borderWidth: 2, pointBackgroundColor: '#a78bfa', pointRadius: 5,
+      tension: 0.4, fill: true }]},
+    options: { responsive: true, maintainAspectRatio: false,
+      plugins: { legend: { display: false }},
+      scales: {
+        x: { grid: { color: grid }, ticks: { color: tick }},
+        y: { grid: { color: grid }, ticks: { color: tick }, min: 0, suggestedMax: 10 }
+      }},
+    plugins: [goalLine(7, 'rgba(167,139,250,0.4)')]
+  });
+
+ 
+  new Chart(document.getElementById('habitChart'), {
+    type: 'bar',
+    data: { labels: labels, datasets: [
+      { label: 'Exercise', data: exData,
+        backgroundColor: 'rgba(224,66,58,0.7)', borderColor: '#e0423a',
+        borderWidth: 1, borderRadius: 6 },
+      { label: 'Healthy Food', data: fData,
+        backgroundColor: 'rgba(34,197,94,0.55)', borderColor: '#22c55e',
+        borderWidth: 1, borderRadius: 6 }
+    ]},
+    options: { responsive: true, maintainAspectRatio: false,
+      plugins: { legend: { labels: { color: '#9b98a8', boxWidth: 12, padding: 16 }}},
+      scales: {
+        x: { grid: { color: grid }, ticks: { color: tick }},
+        y: { grid: { color: grid }, min: 0, max: 1,
+          ticks: { stepSize: 1, color: tick,
+            callback: function(v) { return v === 1 ? 'Hit' : 'Miss'; }}}
+      }}
+  });
+
+  
+  function ring(id, pct, color) {
+    new Chart(document.getElementById(id), {
+      type: 'doughnut',
+      data: { datasets: [{ data: [pct, 100-pct],
+        backgroundColor: [color, 'rgba(255,255,255,0.05)'],
+        borderWidth: 0, borderRadius: 4 }]},
+      options: { cutout: '72%', responsive: false,
+        plugins: { legend: { display: false }, tooltip: { enabled: false }}}
+    });
+  }
+
+  ring('exRing',   exPct,   '#e0423a');
+  ring('foodRing', foodPct, '#22c55e');
+  ring('waterRing',wGoal,   '#4a8df5');
+}
+
+
+var s = document.createElement('script');
+s.src = 'https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js';
+s.onload = function() { initCharts(); };
+document.head.appendChild(s);
+</script>
+{% endblock %}
