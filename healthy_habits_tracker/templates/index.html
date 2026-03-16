@@ -1,38 +1,77 @@
-<!-- templates/index.html -->
 {% extends "base.html" %}
+{% block title %}History — Healthy Habits Tracker{% endblock %}
 
 {% block content %}
-<h1>Habit Entries</h1>
+<section class="page-header">
+  <div class="page-header-inner">
+    <p class="eyebrow">Your Progress</p>
+    <h1 class="page-title">HABIT <span class="accent-red">HISTORY</span></h1>
+    <p class="page-sub">Every rep counts. Every drop counts. Every meal counts.</p>
+  </div>
+  <a href="{{ '/log' }}" class="btn-primary">+ Log Today</a>
+</section>
 
-{% if entries %}
-<table>
-    <tr>
-        <th>Date</th>
-        <th>Gym</th>
-        <th>Water</th>
-        <th>Healthy Food</th>
-        <th>Actions</th>
-    </tr>
-
-    {% for e in entries %}
-    <tr>
-        <td>{{ e.date }}</td>
-        <td>{{ "Yes" if e.gym else "No" }}</td>
-        <td>{{ e.water }}</td>
-        <td>{{ "Yes" if e.healthy_food else "No" }}</td>
-        <td>
-            <a href="{{ url_for('detail', entry_id=e.id) }}">View</a>
-            <a href="{{ url_for('edit_entry', entry_id=e.id) }}">Edit</a>
-            <form action="{{ url_for('delete_entry', entry_id=e.id) }}" method="POST" style="display:inline;">
-    <button type="submit" style="background:none; border:none; color:inherit; cursor:pointer; padding:0; font:inherit;">Delete</button>
-</form>
-        </td>
-    </tr>
-    {% endfor %}
-</table>
-
-{% else %}
-<p>No entries yet.</p>
-{% endif %}
-
+<section class="table-section">
+  {% if entries %}
+  <div class="table-wrapper">
+    <table class="habits-table">
+      <thead>
+        <tr>
+          <th>Date</th>
+          <th>Gym</th>
+          <th>Water</th>
+          <th>Healthy Food</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for entry in entries %}
+        <tr>
+          <td class="td-date">{{ entry.date.strftime('%b %d, %Y') }}</td>
+          <td>
+            {% if entry.gym %}
+              <span class="badge badge-green">✔ Yes</span>
+            {% else %}
+              <span class="badge badge-gray">✘ No</span>
+            {% endif %}
+          </td>
+          <td class="td-water">
+            <span class="water-count">{{ entry.water }}</span>
+            <span class="water-label">cups</span>
+          </td>
+          <td>
+            {% if entry.healthy_food %}
+              <span class="badge badge-green">✔ Yes</span>
+            {% else %}
+              <span class="badge badge-gray">✘ No</span>
+            {% endif %}
+          </td>
+          <td class="td-actions">
+            <a href="{{ url_for('detail', entry_id=entry.id) }}" class="action-btn action-view">View</a>
+            <a href="{{ url_for('edit_entry', entry_id=entry.id) }}" class="action-btn action-edit">Edit</a>
+            <form method="POST" action="{{ url_for('delete_entry', entry_id=entry.id) }}" style="display:inline;" onsubmit="return confirm('Delete entry for {{ entry.date }}?')">
+              <button type="submit" class="action-btn action-delete">Delete</button>
+            </form>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  {% else %}
+  <div class="empty-state">
+    <div class="empty-icon">
+      <svg width="64" height="64" viewBox="0 0 64 64" fill="none">
+        <rect x="8" y="28" width="48" height="8" rx="4" fill="#e0423a" opacity="0.3"/>
+        <rect x="4" y="22" width="12" height="20" rx="4" fill="#e0423a" opacity="0.3"/>
+        <rect x="48" y="22" width="12" height="20" rx="4" fill="#e0423a" opacity="0.3"/>
+        <circle cx="32" cy="14" r="7" fill="#e0423a" opacity="0.3"/>
+      </svg>
+    </div>
+    <h2 class="empty-title">No entries yet</h2>
+    <p class="empty-sub">Start logging your habits today and watch your progress build up.</p>
+    <a href="{{ '/log' }}" class="btn-primary">Log Your First Day</a>
+  </div>
+  {% endif %}
+</section>
 {% endblock %}
