@@ -2,8 +2,7 @@ from flask import Flask, render_template, request, redirect, url_for, flash
 from flask_sqlalchemy import SQLAlchemy  # type: ignore
 from sqlalchemy.exc import IntegrityError
 from pathlib import Path
-from datetime import date
-
+from datetime import datetime
 
 APP_NAME = "Healthy Habits Tracker"
 APP_VERSION = "2.0.0"
@@ -13,6 +12,7 @@ app = Flask(__name__)
 app.config["SECRET_KEY"] = "dev-secret"
 
 Path(app.instance_path).mkdir(parents=True, exist_ok=True)
+
 app.config["SQLALCHEMY_DATABASE_URI"] = f"sqlite:///{Path(app.instance_path) / 'app.db'}"
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 
@@ -40,196 +40,214 @@ class HabitEntry(db.Model):
     notes = db.Column(db.String(300), default="")
 
 
+
 with app.app_context():
     db.create_all()
 
-
-@app.get("/")
+@app.route("/")
 def home():
-    """Home page with app description and quick stats."""
     total_entries = HabitEntry.query.count()
+    entries = HabitEntry.query.order_by(HabitEntry.date.desc()).all()
 
     streak = 0
-    today = date.today()
-    entries = (
-        HabitEntry.query
-        .order_by(HabitEntry.date.desc())
-        .all()
-    )
     if entries:
         from datetime import timedelta
+
+        today = datetime.today().date()
         check_date = today
         entry_dates = {e.date for e in entries}
-       
+
         if today not in entry_dates:
             check_date = today - timedelta(days=1)
+
         while check_date in entry_dates:
             streak += 1
             check_date -= timedelta(days=1)
 
-    return render_template("index.html", total_entries=total_entries, streak=streak)
+    return render_template(
+        "index.html",
+        total_entries=total_entries,
+        streak=streak,
+        entries=entries,
+    )
 
 
+@app.route("/add", methods=["GET", "POST"], endpoint="add_entry")
 @app.route("/log", methods=["GET", "POST"])
 def log_habits():
-    """Log a new daily habit entry."""
     if request.method == "GET":
-        return render_template("add_edit.html", entry=None, editing=False)
+        return render_template(
+            "add_edit.html",
+            entry=None,
+            editing=False,
+            page_title="Add Entry",
+        )
 
-   
     date_str = request.form.get("date", "").strip()
     if not date_str:
-        flash("Date is required. Please select a date.", "error")
+        flash("Date is required.", "error")
         return redirect(url_for("log_habits"))
 
-  
     try:
-        entry_date = date.fromisoformat(date_str)
+        entry_date = datetime.strptime(date_str, "%Y-%m-%d").date()
     except ValueError:
         flash("Invalid date format.", "error")
         return redirect(url_for("log_habits"))
 
-  
-    sleep_hours_raw = request.form.get("sleep_hours", "0").strip()
-    try:
-        sleep_hours = float(sleep_hours_raw) if sleep_hours_raw else 0
-    except ValueError:
-        sleep_hours = 0
+    def parse_int(name: str, default: int = 0) -> int:
+        raw = request.form.get(name, str(default)).strip()
+        try:
+            return int(raw) if raw else default
+        except ValueError:
+            return default
+
+    def parse_float(name: str, default: float = 0.0) -> float:
+        raw = request.form.get(name, str(default)).strip()
+        try:
+            return float(raw) if raw else default
+        except ValueError:
+            return default
+
+    sleep_hours = parse_float("sleep_hours", 0.0)
     sleep_quality = request.form.get("sleep_quality", "ok").strip()
-
     exercise_type = request.form.get("exercise_type", "rest").strip()
-    exercise_minutes_raw = request.form.get("exercise_minutes", "0").strip()
-    try:
-        exercise_minutes = int(exercise_minutes_raw) if exercise_minutes_raw else 0
-    except ValueError:
-        exercise_minutes = 0
-
-
-    meals_count_raw = request.form.get("meals_count", "3").strip()
-    try:
-        meals_count = int(meals_count_raw) if meals_count_raw else 3
-    except ValueError:
-        meals_count = 3
-    fruit_veggie_raw = request.form.get("fruit_veggie_servings", "0").strip()
-    try:
-        fruit_veggie_servings = int(fruit_veggie_raw) if fruit_veggie_raw else 0
-    except ValueError:
-        fruit_veggie_servings = 0
+    exercise_minutes = parse_int("exercise_minutes", 0)
+    meals_count = parse_int("meals_count", 3)
+    fruit_veggie_servings = parse_int("fruit_veggie_servings", 0)
     healthy_food = "healthy_food" in request.form
-
-    water_raw = request.form.get("water", "0").strip()
-    try:
-        water = int(water_raw) if water_raw else 0
-    except ValueError:
-        water = 0
-
-
+    water = parse_int("water", 0)
     gym = "gym" in request.form
     notes = request.form.get("notes", "").strip()
 
-   
     entry = HabitEntry(
         date=entry_date,
-        sleep_hours=sleep_hours,
-        sleep_quality=sleep_quality,
-        exercise_type=exercise_type,
-        exercise_minutes=exercise_minutes,
-        meals_count=meals_count,
-        fruit_veggie_servings=fruit_veggie_servings,
         healthy_food=healthy_food,
         water=water,
         gym=gym,
         notes=notes,
     )
 
-    db.session.add(entry)
+    optional_fields = {
+        "sleep_hours": sleep_hours,
+        "sleep_quality": sleep_quality,
+        "exercise_type": exercise_type,
+        "exercise_minutes": exercise_minutes,
+        "meals_count": meals_count,
+        "fruit_veggie_servings": fruit_veggie_servings,
+    }
+    for field, value in optional_fields.items():
+        if hasattr(entry, field):
+            setattr(entry, field, value)
 
+    db.session.add(entry)
     try:
         db.session.commit()
-        flash(f"Entry for {entry_date.strftime('%B %d, %Y')} saved successfully!", "success")
+        flash("Entry added successfully.", "success")
         return redirect(url_for("history"))
     except IntegrityError:
         db.session.rollback()
-        flash(f"An entry for {entry_date.strftime('%B %d, %Y')} already exists. Please choose another date or edit the existing one.", "warning")
+        flash("An entry for that date already exists.", "error")
+        return redirect(url_for("log_habits"))
+    except Exception:
+        db.session.rollback()
+        flash("Something went wrong while adding the entry.", "error")
         return redirect(url_for("log_habits"))
 
 
 @app.route("/edit/<int:entry_id>", methods=["GET", "POST"])
 def edit_entry(entry_id):
-    """Edit an existing habit entry."""
     entry = HabitEntry.query.get_or_404(entry_id)
 
     if request.method == "GET":
-        return render_template("add_edit.html", entry=entry, editing=True)
+        return render_template(
+            "add_edit.html",
+            entry=entry,
+            editing=True,
+            page_title="Edit Entry",
+        )
 
-  
-    sleep_hours_raw = request.form.get("sleep_hours", "0").strip()
+    date_str = request.form.get("date", "").strip()
+    if not date_str:
+        flash("Date is required.", "error")
+        return redirect(url_for("edit_entry", entry_id=entry_id))
+
     try:
-        entry.sleep_hours = float(sleep_hours_raw) if sleep_hours_raw else 0
+        entry.date = datetime.strptime(date_str, "%Y-%m-%d").date()
     except ValueError:
-        entry.sleep_hours = 0
-    entry.sleep_quality = request.form.get("sleep_quality", "ok").strip()
+        flash("Invalid date format.", "error")
+        return redirect(url_for("edit_entry", entry_id=entry_id))
 
+    def parse_int(name: str, default: int = 0) -> int:
+        raw = request.form.get(name, str(default)).strip()
+        try:
+            return int(raw) if raw else default
+        except ValueError:
+            return default
 
-    entry.exercise_type = request.form.get("exercise_type", "rest").strip()
-    exercise_minutes_raw = request.form.get("exercise_minutes", "0").strip()
-    try:
-        entry.exercise_minutes = int(exercise_minutes_raw) if exercise_minutes_raw else 0
-    except ValueError:
-        entry.exercise_minutes = 0
-
-    meals_count_raw = request.form.get("meals_count", "3").strip()
-    try:
-        entry.meals_count = int(meals_count_raw) if meals_count_raw else 3
-    except ValueError:
-        entry.meals_count = 3
-    fruit_veggie_raw = request.form.get("fruit_veggie_servings", "0").strip()
-    try:
-        entry.fruit_veggie_servings = int(fruit_veggie_raw) if fruit_veggie_raw else 0
-    except ValueError:
-        entry.fruit_veggie_servings = 0
-    entry.healthy_food = "healthy_food" in request.form
-
-
-    water_raw = request.form.get("water", "0").strip()
-    try:
-        entry.water = int(water_raw) if water_raw else 0
-    except ValueError:
-        entry.water = 0
-
+    def parse_float(name: str, default: float = 0.0) -> float:
+        raw = request.form.get(name, str(default)).strip()
+        try:
+            return float(raw) if raw else default
+        except ValueError:
+            return default
 
     entry.gym = "gym" in request.form
+    entry.healthy_food = "healthy_food" in request.form
+    entry.water = parse_int("water", 0)
     entry.notes = request.form.get("notes", "").strip()
 
-    db.session.commit()
-    flash(f"Entry for {entry.date.strftime('%B %d, %Y')} updated!", "success")
-    return redirect(url_for("history"))
+    optional_fields = {
+        "sleep_hours": parse_float("sleep_hours", 0.0),
+        "sleep_quality": request.form.get("sleep_quality", "ok").strip(),
+        "exercise_type": request.form.get("exercise_type", "rest").strip(),
+        "exercise_minutes": parse_int("exercise_minutes", 0),
+        "meals_count": parse_int("meals_count", 3),
+        "fruit_veggie_servings": parse_int("fruit_veggie_servings", 0),
+    }
+    for field, value in optional_fields.items():
+        if hasattr(entry, field):
+            setattr(entry, field, value)
+
+    try:
+        db.session.commit()
+        flash("Entry updated successfully.", "success")
+        return redirect(url_for("history"))
+    except IntegrityError:
+        db.session.rollback()
+        flash("Another entry already uses that date.", "error")
+        return redirect(url_for("edit_entry", entry_id=entry_id))
+    except Exception:
+        db.session.rollback()
+        flash("Something went wrong while updating the entry.", "error")
+        return redirect(url_for("edit_entry", entry_id=entry_id))
 
 
 @app.route("/delete/<int:entry_id>", methods=["POST"])
 def delete_entry(entry_id):
-    """Delete a habit entry."""
     entry = HabitEntry.query.get_or_404(entry_id)
-    entry_date = entry.date.strftime("%B %d, %Y")
-    db.session.delete(entry)
-    db.session.commit()
-    flash(f"Entry for {entry_date} deleted.", "success")
+
+    try:
+        db.session.delete(entry)
+        db.session.commit()
+        flash("Entry deleted successfully.", "success")
+    except Exception:
+        db.session.rollback()
+        flash("Could not delete the entry.", "error")
+
     return redirect(url_for("history"))
 
 
 @app.get("/history")
 def history():
-    """View all habit entries (newest first)."""
     entries = HabitEntry.query.order_by(HabitEntry.date.desc()).all()
-    return render_template("history.html", entries=entries)
+    return render_template("index.html", entries=entries)
 
 
+@app.route("/entry/<int:entry_id>", endpoint="entry_detail")
 @app.get("/detail/<int:entry_id>")
 def detail(entry_id):
-    """View a single entry in detail."""
     entry = HabitEntry.query.get_or_404(entry_id)
     return render_template("detail.html", entry=entry)
-
 
 if __name__ == "__main__":
     app.run(debug=True)
