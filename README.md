@@ -1,413 +1,227 @@
-# Healthy Habits Tracker (Flask)
+# Healthy Habits Tracker
 
-## Overview
-
-**Healthy Habits Tracker** is a Flask web application (school group project) that helps users track daily healthy habits such as:
-
-* Going to the gym
-* Drinking water
-* Eating healthy food
-
-Users can select a day, submit their habits, and view a list of all submitted days. The project is built with **Python + Flask** and can be extended later with statistics and charts.
+A Flask web application built as a school group project to help users track daily healthy habits including exercise, sleep, hydration, and nutrition.
 
 ---
 
-## MVP Description (5–10 sentences)
+## Team Members
 
-Healthy Habits Tracker solves the problem of forgetting or inconsistently tracking daily healthy habits. It is designed for students and busy individuals who want a simple way to record healthy behaviors without complex features. The app allows a user to choose a date and log whether they went to the gym, how much water they drank, and whether they ate healthy food that day. The user can submit the entry and then view a history of previous days they recorded. The MVP focuses on creating a useful daily log with a clear, repeatable workflow: select date → record habits → submit → view history. The app is intentionally lightweight so it can be built quickly and used immediately. Future versions may add charts or statistics, but the MVP is mainly about saving and viewing daily habit records.
-
----
-
-## Scope (MVP)
-
-The MVP will include only the core features needed for a basic habit-tracking productivity app:
-
-* A Home page that explains what the app does and provides navigation.
-* A Log Habits page where the user selects a date and submits habit data (gym, water, healthy food).
-* A History page that displays all saved entries in a readable list.
-* Basic validation and friendly error messages (example: date is required).
-* Simple storage for entries (in-memory for Sprint 3), with the option to add a database later.
+| Name | Role |
+|------|------|
+| Quantis | Lead Dev / Repo Manager |
+| Elida | Frontend / Full Stack |
+| Thaina | Styling (CSS / UX) |
+| Anthony | Frontend (HTML) |
+| Sesilina | Stats / Evolution |
 
 ---
 
-## Objectives (Sprint 3)
+## What the App Does
 
-In Sprint 3, the team aims to complete a working MVP that can be run locally by any team member:
+Users can log daily habits and view their progress over time. The workflow is:
 
-* Implement Flask routes for Home, Log (GET/POST), and History.
-* Build basic HTML templates using a shared base layout with navigation.
-* Implement a simple storage method to save and retrieve habit entries.
-* Use Post/Redirect/Get after form submission to prevent duplicate submits on refresh.
-* Display saved entries clearly in History (date + habit values).
-* Ensure the app runs consistently for the team using `requirements.txt` and README setup steps.
+**Log Habits → View History → Check Stats**
 
----
+### Habits tracked per day
 
-## Requirements
+| Category | Fields |
+|----------|--------|
+| Sleep | Hours slept, quality (great / ok / bad) |
+| Exercise | Type (gym, run, walk, yoga, sports, rest — multi-select), duration in minutes |
+| Nutrition | Healthy food (yes/no), meals count, fruits & veggies servings |
+| Hydration | Water cups |
+| Notes | Free text (up to 300 chars) |
 
-### Functional Requirements
+### Pages
 
-1. The app must display a Home page with a short description of the project and navigation links.
-2. The app must allow the user to open a Log Habits page and submit a habit entry for a selected date.
-3. The Log Habits form must include at least these habit fields: gym (yes/no), water (number), healthy food (yes/no).
-4. The app must validate that the date field is required and show a friendly error message if missing.
-5. The app must save submitted habit entries using a consistent storage method (MVP storage can be in-memory).
-6. The app must provide a History page that lists all submitted habit entries.
-7. After a successful form submission, the app must redirect to another page (PRG pattern) to avoid duplicate form submission on refresh.
-8. The app should allow viewing entries even when no entries exist (show “No entries yet” message).
-
-### Non-Functional Requirements
-
-1. The application must be built using Python + Flask.
-2. The project must run locally on Windows/macOS/Linux using the instructions in the README.
-3. The project must include a `requirements.txt` so dependencies install consistently.
-4. The project must not require login/authentication for the MVP.
-5. The MVP should remain simple (no advanced features required like charts, accounts, or cloud hosting).
-6. The code must be organized with a clear folder structure (`templates/`, `static/`, `app.py`).
-7. The repository must use GitHub issues and a Kanban board to track tasks and progress.
-
----
-
-## User Stories (5–8)
-
-1. As a user, I want to open the app and understand what it does so I know how to use it.
-2. As a user, I want to select a date and log my habits so I can record what I did that day.
-3. As a user, I want to submit my habit entry and receive confirmation so I know it saved successfully.
-4. As a user, I want to see a history of my entries so I can review my past habit tracking.
-5. As a user, I want the app to warn me if I forget to select a date so I can fix the form and submit correctly.
-6. As a user, I want the app to handle an empty history page nicely so I don’t get confused when I have no entries yet.
-7. As a developer on the team, I want clear setup instructions so I can run the project without troubleshooting.
-8. As a team member, I want tasks split into issues so we can work in parallel and review each other’s work.
-
----
-
-## What This Group Is For
-
-This project was built by a group to collaborate on planning, development, testing, and documentation.
-The group’s purpose is to:
-
-* split responsibilities (backend, frontend, testing, documentation)
-* review each other’s code (pull requests, code reviews)
-* keep the project organized using issues/tasks
-* ensure consistent quality, structure, and deadlines
-
-### Team Members
-
-* **Quantis** 
-* **Elida**
-* **Thaina** 
-* **Anthony** 
-* **Sesilina**
-
+- **Home** — landing page with app description and navigation
+- **Log Habits** — form to log a new daily entry
+- **History** — table of all entries with View / Edit / Delete actions
+- **Stats** — KPI cards, streaks, Chart.js charts, consistency rings
+- **Detail** — full view of a single entry with day score
+- **Login / Signup** — simple session-based authentication
 
 ---
 
 ## Tech Stack
 
-* Python 3.x
-* Flask
-* Flask-SQLAlchemy (SQLite database)
-* HTML/CSS (Jinja templates)
-* Git + GitHub
-* (Optional) Chart.js for progress charts
+| Layer | Technology |
+|-------|-----------|
+| Backend | Python 3.10+, Flask |
+| Database | SQLite via Flask-SQLAlchemy |
+| Frontend | HTML, CSS, Jinja2 templates |
+| Charts | Chart.js 4.4 (CDN) |
+| Auth | Flask sessions (plain text MVP) |
+| Version Control | Git + GitHub |
 
 ---
 
 ## Project Structure
 
-Your repo should look like this (venv is NOT committed to GitHub):
-
-```txt
+```
 Team-1-s-Web-App/
-├─ healthy_habits_tracker/
-│  ├─ app.py
-│  ├─ requirements.txt
-│  ├─ templates/
-│  │  ├─ base.html
-│  │  ├─ index.html
-│  │  ├─ add_edit.html
-│  │  └─ detail.html
-│  ├─ static/
-│  │  └─ style.css
-│  └─ instance/
-│     └─ app.db   (auto-created)
-├─ .gitignore
-└─ README.md
+├── healthy_habits_tracker/
+│   ├── app.py                  ← Flask routes, models, logic
+│   ├── requirements.txt
+│   ├── templates/
+│   │   ├── base.html           ← shared layout + navbar + flash messages
+│   │   ├── home.html           ← landing page
+│   │   ├── add_edit.html       ← log + edit form (shared template)
+│   │   ├── history.html        ← entry list table
+│   │   ├── detail.html         ← single entry detail view
+│   │   ├── stats.html          ← charts + streaks + KPIs
+│   │   ├── login.html
+│   │   └── signup.html
+│   ├── static/
+│   │   └── style.css
+│   └── instance/
+│       └── app.db              ← auto-created, do NOT commit
+├── .gitignore
+└── README.md
 ```
 
 ---
 
 ## Prerequisites
 
-* Windows, macOS, or Linux
-* Internet access
-* Python installed (recommended: Python 3.10+)
-* Git installed
+- Python 3.10+
+- Git
+- Internet access (for Google Fonts and Chart.js CDN)
 
 ---
 
-# Step-by-Step: Install Git
+## Setup Instructions
 
-## Windows (Git for Windows)
-
-1. Download Git: [https://git-scm.com/downloads](https://git-scm.com/downloads)
-2. Run the installer
-3. Recommended option: **"Git from the command line and also from 3rd-party software"**
-4. Verify:
-
-   ```bash
-   git --version
-   ```
-
-## macOS
-
-**Option A (recommended): Homebrew**
-
-```bash
-brew install git
-git --version
-```
-
-**Option B: Xcode Command Line Tools**
-
-```bash
-xcode-select --install
-git --version
-```
-
-## Linux (Ubuntu/Debian)
-
-```bash
-sudo apt update
-sudo apt install git -y
-git --version
-```
-
----
-
-# Step-by-Step: Clone the Repository
-
-1. Copy the repo URL from GitHub → **Code** → HTTPS
-2. Clone and enter the folder:
+### 1. Clone the repository
 
 ```bash
 git clone https://github.com/QuantisX/Team-1-s-Web-App.git
 cd Team-1-s-Web-App
 ```
 
-Verify:
+### 2. Create and activate a virtual environment
 
-```bash
-git status
-git remote -v
-```
-
----
-
-# Step-by-Step: Set Up Python + Flask (Virtual Environment)
-
-## Windows (PowerShell)
-
-From the repo root (`Team-1-s-Web-App/`):
-
+**Windows (PowerShell):**
 ```powershell
-# Create venv (do NOT commit this folder)
 python -m venv myproject
-
-# Activate venv
 myproject\Scripts\Activate.ps1
-
-# Install dependencies
-pip install -r healthy_habits_tracker\requirements.txt
 ```
 
-## macOS/Linux
-
+**macOS/Linux:**
 ```bash
 python3 -m venv myproject
 source myproject/bin/activate
+```
+
+### 3. Install dependencies
+
+```bash
 pip install -r healthy_habits_tracker/requirements.txt
 ```
 
+### 4. Run the app
+
+**Windows:**
+```powershell
+flask --app healthy_habits_tracker/app.py run
+```
+
+**macOS/Linux:**
+```bash
+flask --app healthy_habits_tracker/app.py run
+```
+
+Open in browser: [http://127.0.0.1:5000](http://127.0.0.1:5000)
+
 ---
 
-## requirements.txt (example)
+## requirements.txt
 
-Make sure your `healthy_habits_tracker/requirements.txt` includes at least:
-
-```txt
+```
 Flask
 Flask-SQLAlchemy
 ```
 
-If you don’t have it yet, you can generate it after installing packages:
-
+To regenerate after installing new packages:
 ```bash
 pip freeze > healthy_habits_tracker/requirements.txt
 ```
 
 ---
 
-# Running the Project
+## Database
 
-## Windows (PowerShell)
+The SQLite database (`app.db`) is created automatically on first run inside the `instance/` folder. No setup needed.
 
-From the repo root:
+**If you add new model fields**, delete `instance/app.db` and restart Flask — it will recreate the database with the new schema.
 
-```powershell
-myproject\Scripts\Activate.ps1
-flask --app healthy_habits_tracker/app.py run
-```
-
-## macOS/Linux
-
-```bash
-source myproject/bin/activate
-flask --app healthy_habits_tracker/app.py run
-```
-
-Open in browser:
-
-* [http://127.0.0.1:5000](http://127.0.0.1:5000)
+> ⚠️ Never commit `app.db` to GitHub. It is listed in `.gitignore`.
 
 ---
 
-# How the Database (instance/app.db) Is Auto-Created
+## Features Implemented
 
-The SQLite database file **`app.db`** is created automatically when:
-
-1. The app config points to SQLite, and
-2. The app runs `db.create_all()` to create the tables.
-
-### Minimum example (what app.py should include)
-
-Your `healthy_habits_tracker/app.py` should have logic like this:
-
-* Ensure the instance folder exists
-* Configure SQLite
-* Create tables at startup
-
-```python
-from pathlib import Path
-from flask import Flask
-from flask_sqlalchemy import SQLAlchemy
-
-app = Flask(__name__)
-app.config["SECRET_KEY"] = "dev"
-
-# Ensure instance folder exists
-Path(app.instance_path).mkdir(parents=True, exist_ok=True)
-
-# This creates the DB inside the instance folder
-app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///app.db"
-app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
-
-db = SQLAlchemy(app)
-
-class HabitEntry(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    # add fields here...
-
-with app.app_context():
-    db.create_all()
-```
-
-After running Flask once, you should see:
-
-```txt
-healthy_habits_tracker/instance/app.db
-```
-
----
-
-# Important: Do NOT Push the Virtual Environment to GitHub
-
-Your virtual environment folder (example: `myproject/`) must be ignored.
-
-Create a `.gitignore` in the repo root:
-
-```gitignore
-# Virtual environments
-myproject/
-venv/
-.venv/
-env/
-
-# Python cache
-__pycache__/
-*.pyc
-
-# DB files (do not commit local databases)
-healthy_habits_tracker/instance/*.db
-```
-
-### If you already tracked the venv by mistake
-
-```powershell
-git rm -r --cached myproject
-git commit -m "Ignore venv folder"
-git push
-```
+- [x] Home page with hero section and feature cards
+- [x] Log Habits form with all habit fields
+- [x] Multi-select exercise types (gym, run, walk, yoga, sports, rest)
+- [x] History page with sortable table and badges
+- [x] Detail page with day score (out of 5)
+- [x] Edit and Delete entries
+- [x] Flash messages across all pages
+- [x] Login and Signup with session management
+- [x] Stats page with KPI cards
+- [x] Current and best streak tracking (exercise + healthy food)
+- [x] Chart.js charts — water bar, sleep line, exercise & food grouped bar
+- [x] Doughnut rings — exercise %, clean eating %, hydration goal %
+- [x] PRG pattern (Post/Redirect/Get) to prevent duplicate submissions
+- [x] Responsive design (mobile-friendly)
 
 ---
 
 ## Common Issues & Fixes
 
-### “Could not locate a Flask application”
-
-Run Flask with the correct path:
-
+**"Could not locate a Flask application"**
 ```bash
 flask --app healthy_habits_tracker/app.py run
 ```
 
-### “python is not recognized” (Windows)
+**"python is not recognized" (Windows)**
+- Reinstall Python and check **Add Python to PATH**
+- Restart terminal
 
-* Reinstall Python and check **Add Python to PATH**
-* Restart terminal
+**"no such column" error**
+- Delete `healthy_habits_tracker/instance/app.db` and restart Flask
 
-### “pip not found”
-
-```bash
-python -m ensurepip --upgrade
-python -m pip install --upgrade pip
-```
-
-### Port already in use
-
+**Port already in use**
 ```bash
 flask --app healthy_habits_tracker/app.py run --port 5001
 ```
 
+**Charts not rendering**
+- Make sure you have internet access (Chart.js loads from CDN)
+- Hard refresh: `Ctrl + Shift + R`
+
 ---
 
-## Contributing (Team Workflow)
+## Team Workflow (Git)
 
-1. Create a branch:
+```bash
+# Create a branch for your feature
+git checkout -b feature/your-feature-name
 
-   ```bash
-   git checkout -b feature/your-feature-name
-   ```
-2. Commit changes:
+# Make changes, then stage and commit
+git add .
+git commit -m "Brief description of change"
 
-   ```bash
-   git add .
-   git commit -m "Describe your change"
-   ```
-3. Push:
+# Push and open a Pull Request
+git push origin feature/your-feature-name
+```
 
-   ```bash
-   git push origin feature/your-feature-name
-   ```
-4. Open a Pull Request on GitHub for review.
+Review each other's PRs before merging to `main`.
 
 ---
 
 ## License
 
-MIT License (or course-required license)
-
-Copyright (c) 2026
-Permission is hereby granted, free of charge, to any person obtaining a copy of this software...
-*(keep the standard MIT text if your class allows it)*
+MIT License — Copyright (c) 2026 Team 1
 
