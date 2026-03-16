@@ -1,0 +1,131 @@
+{% extends "base.html" %}
+{% block title %}Healthy Habits Tracker{% endblock %}
+
+{% block content %}
+
+<!-- ── HERO ── -->
+<section class="hero">
+  <div class="hero-content">
+    <div class="hero-eyebrow">
+      <span class="eyebrow-dot"></span>
+      Track · Lift · Repeat
+    </div>
+    <h1 class="hero-title">
+      BUILD<br>
+      <span class="accent-red">STRONGER</span><br>
+      <span class="accent-blue">HABITS</span>
+    </h1>
+    <p class="hero-sub">
+      Log your gym sessions, hydration, and nutrition every day.
+      Turn consistency into results — one rep at a time.
+    </p>
+    <div class="hero-actions">
+      {% if session.get('user') %}
+        <a href="{{ url_for('add_entry') }}" class="btn-primary">Log Today's Habits</a>
+        <a href="{{ url_for('index') }}" class="btn-ghost">View History →</a>
+      {% else %}
+        <a href="{{ url_for('signup') }}" class="btn-primary">Get Started Free</a>
+        <a href="{{ url_for('login') }}" class="btn-ghost">Log In →</a>
+      {% endif %}
+    </div>
+    <div class="hero-stats">
+      <div class="stat-item">
+        <div class="stat-num">3</div>
+        <div class="stat-label">Core Habits</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-num">30+</div>
+        <div class="stat-label">Days Tracked</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-num">100%</div>
+        <div class="stat-label">Free</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- LIFTER SVG -->
+  <div class="hero-visual">
+    <div class="lifter-glow"></div>
+    <svg class="lifter-svg" width="340" height="420" viewBox="0 0 340 420" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <ellipse cx="170" cy="390" rx="100" ry="14" fill="rgba(224,66,58,0.15)"/>
+      <rect x="18" y="178" width="28" height="52" rx="5" fill="#3a1a1a" stroke="#e0423a" stroke-width="2"/>
+      <rect x="46" y="188" width="14" height="34" rx="3" fill="#2a1010" stroke="#e0423a" stroke-width="1.5"/>
+      <rect x="294" y="178" width="28" height="52" rx="5" fill="#3a1a1a" stroke="#e0423a" stroke-width="2"/>
+      <rect x="280" y="188" width="14" height="34" rx="3" fill="#2a1010" stroke="#e0423a" stroke-width="1.5"/>
+      <rect x="58" y="200" width="224" height="10" rx="5" fill="#c0c0cc"/>
+      <rect x="58" y="201" width="224" height="4" rx="2" fill="rgba(255,255,255,0.2)"/>
+      <rect x="144" y="310" width="24" height="70" rx="8" fill="#1e1e2e"/>
+      <rect x="172" y="310" width="24" height="70" rx="8" fill="#1e1e2e"/>
+      <rect x="134" y="370" width="44" height="16" rx="6" fill="#e0423a"/>
+      <rect x="162" y="370" width="44" height="16" rx="6" fill="#e0423a"/>
+      <rect x="132" y="210" width="76" height="108" rx="16" fill="#2b2b3d"/>
+      <path d="M160 218 L170 240 L180 218" stroke="rgba(224,66,58,0.5)" stroke-width="1.5" fill="none"/>
+      <rect x="159" y="190" width="22" height="28" rx="8" fill="#c0835a"/>
+      <ellipse cx="170" cy="168" rx="26" ry="28" fill="#c0835a"/>
+      <ellipse cx="162" cy="162" rx="3.5" ry="4" fill="#1a1a2a"/>
+      <ellipse cx="178" cy="162" rx="3.5" ry="4" fill="#1a1a2a"/>
+      <path d="M160 174 Q170 180 180 174" stroke="#8a5030" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+      <path d="M157 156 Q162 152 167 155" stroke="#6b3a1a" stroke-width="2.5" stroke-linecap="round" fill="none"/>
+      <path d="M173 155 Q178 152 183 156" stroke="#6b3a1a" stroke-width="2.5" stroke-linecap="round" fill="none"/>
+      <path d="M144 155 Q148 132 170 130 Q192 132 196 155 Q185 140 170 140 Q155 140 144 155Z" fill="#2a1a0a"/>
+      <path d="M132 225 Q96 215 70 210" stroke="#c0835a" stroke-width="22" stroke-linecap="round" fill="none"/>
+      <path d="M70 210 Q60 208 60 205" stroke="#c0835a" stroke-width="18" stroke-linecap="round" fill="none"/>
+      <path d="M208 225 Q244 215 270 210" stroke="#c0835a" stroke-width="22" stroke-linecap="round" fill="none"/>
+      <path d="M270 210 Q280 208 280 205" stroke="#c0835a" stroke-width="18" stroke-linecap="round" fill="none"/>
+      <ellipse cx="62" cy="205" rx="14" ry="10" fill="#e0423a"/>
+      <ellipse cx="278" cy="205" rx="14" ry="10" fill="#e0423a"/>
+      <path d="M150 215 L170 240 L190 215" stroke="#1a1a2a" stroke-width="3" fill="none" stroke-linejoin="round"/>
+      <ellipse cx="118" cy="175" rx="3" ry="5" fill="rgba(74,141,245,0.7)" transform="rotate(-10 118 175)"/>
+      <ellipse cx="222" cy="172" rx="2.5" ry="4" fill="rgba(74,141,245,0.6)" transform="rotate(8 222 172)"/>
+      <rect x="214" y="132" width="52" height="26" rx="13" fill="#e0423a"/>
+      <text x="240" y="150" text-anchor="middle" font-size="12" font-weight="700" fill="white" font-family="Barlow, sans-serif">PR!</text>
+      <text x="32" y="208" text-anchor="middle" font-size="9" font-weight="700" fill="#e0423a" font-family="Barlow, sans-serif">45</text>
+      <text x="308" y="208" text-anchor="middle" font-size="9" font-weight="700" fill="#e0423a" font-family="Barlow, sans-serif">45</text>
+    </svg>
+  </div>
+</section>
+
+<!-- ── FEATURES ── -->
+<section class="features-section">
+  <p class="features-label">What You Track</p>
+  <h2 class="features-title">THREE HABITS. EVERY DAY.</h2>
+  <div class="feature-grid">
+
+    <div class="feature-card">
+      <div class="feature-icon icon-red">
+        <svg width="22" height="22" viewBox="0 0 22 22" fill="none">
+          <rect x="1" y="9" width="20" height="4" rx="2" fill="#e0423a"/>
+          <rect x="0" y="7" width="5" height="8" rx="2" fill="#e0423a"/>
+          <rect x="17" y="7" width="5" height="8" rx="2" fill="#e0423a"/>
+        </svg>
+      </div>
+      <h3>Gym Session</h3>
+      <p>Did you make it to the gym today? Log your workout and keep your streak alive.</p>
+    </div>
+
+    <div class="feature-card">
+      <div class="feature-icon icon-blue">
+        <svg width="22" height="22" viewBox="0 0 22 22" fill="none">
+          <path d="M11 3 Q16 8 16 13 A5 5 0 0 1 6 13 Q6 8 11 3Z" fill="#4a8df5"/>
+        </svg>
+      </div>
+      <h3>Hydration</h3>
+      <p>Track your daily water intake in glasses. Stay hydrated, stay sharp.</p>
+    </div>
+
+    <div class="feature-card">
+      <div class="feature-icon icon-purple">
+        <svg width="22" height="22" viewBox="0 0 22 22" fill="none">
+          <rect x="3" y="12" width="16" height="7" rx="3" fill="#6333b9"/>
+          <path d="M7 12 Q7 5 11 5 Q15 5 15 12" stroke="#6333b9" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+        </svg>
+      </div>
+      <h3>Healthy Food</h3>
+      <p>Did you eat clean today? Fuel the machine and check it off your list.</p>
+    </div>
+
+  </div>
+</section>
+
+{% endblock %}
