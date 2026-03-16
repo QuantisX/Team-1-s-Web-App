@@ -10,6 +10,6 @@
 <p><strong>Healthy Food:</strong> {{ "Yes" if entry.healthy_food else "No" }}</p>
 <p><strong>Notes:</strong> {{ entry.notes }}</p>
 
-<a href="{{ url_for('index') }}">Back</a>
+<a href="{{ url_for('home') }}">Back</a>
 <a href="{{ url_for('edit_entry', entry_id=entry.id) }}">Edit</a>
 {% endblock %}

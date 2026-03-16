@@ -240,7 +240,7 @@ def delete_entry(entry_id):
 @app.get("/history")
 def history():
     entries = HabitEntry.query.order_by(HabitEntry.date.desc()).all()
-    return render_template("history.html", entries=entries)
+    return render_template("index.html", entries=entries)
 
 
 @app.route("/entry/<int:entry_id>", endpoint="entry_detail")

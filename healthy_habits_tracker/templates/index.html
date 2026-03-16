@@ -23,7 +23,9 @@
         <td>
             <a href="{{ url_for('detail', entry_id=e.id) }}">View</a>
             <a href="{{ url_for('edit_entry', entry_id=e.id) }}">Edit</a>
-            <a href="{{ url_for('delete_entry', entry_id=e.id) }}">Delete</a>
+            <form action="{{ url_for('delete_entry', entry_id=e.id) }}" method="POST" style="display:inline;">
+    <button type="submit" style="background:none; border:none; color:inherit; cursor:pointer; padding:0; font:inherit;">Delete</button>
+</form>
         </td>
     </tr>
     {% endfor %}
