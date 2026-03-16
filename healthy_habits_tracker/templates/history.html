@@ -1,0 +1,206 @@
+{% extends "base.html" %}
+{% block title %}History — Healthy Habits Tracker{% endblock %}
+
+{% block styles %}
+<style>
+  .hw { padding:0; background:#0a0a0f; min-height:100vh; }
+
+  .hh {
+    display:flex; align-items:flex-end; justify-content:space-between;
+    padding:2.5rem 3rem 2rem; border-bottom:1px solid rgba(255,255,255,0.07);
+    flex-wrap:wrap; gap:1rem;
+  }
+  .hh-left p { font-size:0.7rem; font-weight:700; letter-spacing:3px; text-transform:uppercase; color:#e0423a; margin-bottom:0.4rem; }
+  .hh-left h1 { font-family:'Bebas Neue',sans-serif; font-size:3.2rem; letter-spacing:2px; line-height:1; color:#f0eee8; margin:0; }
+  .hh-left h1 span { color:#e0423a; }
+  .hh-left .sub { color:#7e7c8a; margin-top:0.4rem; font-size:0.9rem; }
+
+  .btn-new {
+    background:#e0423a; color:#fff; padding:0.8rem 1.8rem;
+    border-radius:8px; font-weight:700; text-transform:uppercase;
+    letter-spacing:0.5px; text-decoration:none; font-size:0.88rem;
+    font-family:'Barlow',sans-serif; white-space:nowrap;
+    transition:background 0.2s;
+  }
+  .btn-new:hover { background:#c23430; text-decoration:none; color:#fff; }
+
+  .htable-wrap { padding:2rem 3rem 4rem; overflow-x:auto; }
+
+  table { width:100%; border-collapse:collapse; font-size:0.9rem; }
+
+  thead { background:#13131c; border-bottom:1px solid rgba(255,255,255,0.07); }
+  th {
+    padding:1rem 1.2rem; text-align:left;
+    font-size:0.68rem; font-weight:700; letter-spacing:1.5px;
+    text-transform:uppercase; color:#7e7c8a;
+  }
+  td { padding:1rem 1.2rem; border-bottom:1px solid rgba(255,255,255,0.05); vertical-align:middle; }
+  tbody tr:last-child td { border-bottom:none; }
+  tbody tr:hover { background:rgba(255,255,255,0.02); }
+
+  .td-date { font-weight:700; color:#f0eee8; font-size:0.95rem; }
+  .td-date a { color:#f0eee8; text-decoration:none; }
+  .td-date a:hover { color:#e0423a; }
+
+  .badge-yes {
+    display:inline-block; padding:4px 12px; border-radius:100px;
+    background:rgba(34,197,94,0.12); color:#86efac;
+    border:1px solid rgba(34,197,94,0.25);
+    font-size:0.78rem; font-weight:700;
+  }
+  .badge-no {
+    display:inline-block; padding:4px 12px; border-radius:100px;
+    background:rgba(255,255,255,0.04); color:#5c5a66;
+    border:1px solid rgba(255,255,255,0.08);
+    font-size:0.78rem; font-weight:700;
+  }
+  .ex-name { display:block; font-size:0.75rem; color:#5c5a66; margin-top:3px; }
+
+  .sleep-great { background:rgba(34,197,94,0.12); color:#86efac; border:1px solid rgba(34,197,94,0.2); }
+  .sleep-ok    { background:rgba(234,179,8,0.1);  color:#fde047; border:1px solid rgba(234,179,8,0.2); }
+  .sleep-bad   { background:rgba(224,66,58,0.1);  color:#fca5a5; border:1px solid rgba(224,66,58,0.2); }
+  .sleep-pill  { display:inline-block; padding:4px 10px; border-radius:100px; font-size:0.78rem; font-weight:700; }
+
+  .water-num { font-family:'Bebas Neue',sans-serif; font-size:1.4rem; letter-spacing:0.5px; }
+  .water-low   { color:#fca5a5; }
+  .water-good  { color:#7e7c8a; }
+  .water-great { color:#4a8df5; }
+  .water-unit  { font-size:0.75rem; color:#5c5a66; margin-left:2px; }
+
+  .servings { font-size:0.78rem; color:#7e7c8a; margin-left:4px; }
+
+  .act-wrap { display:flex; gap:0.5rem; flex-wrap:wrap; }
+  .btn-view {
+    padding:4px 12px; border-radius:6px; font-size:0.75rem; font-weight:700;
+    text-transform:uppercase; letter-spacing:0.5px; text-decoration:none;
+    border:1px solid rgba(74,141,245,0.3); color:#4a8df5;
+    transition:all 0.15s; font-family:'Barlow',sans-serif;
+  }
+  .btn-view:hover { background:rgba(74,141,245,0.1); text-decoration:none; }
+  .btn-edit2 {
+    padding:4px 12px; border-radius:6px; font-size:0.75rem; font-weight:700;
+    text-transform:uppercase; letter-spacing:0.5px; text-decoration:none;
+    border:1px solid rgba(234,179,8,0.3); color:#fde047;
+    transition:all 0.15s; font-family:'Barlow',sans-serif;
+  }
+  .btn-edit2:hover { background:rgba(234,179,8,0.1); text-decoration:none; }
+  .btn-del {
+    padding:4px 12px; border-radius:6px; font-size:0.75rem; font-weight:700;
+    text-transform:uppercase; letter-spacing:0.5px;
+    border:1px solid rgba(224,66,58,0.3); color:#fca5a5;
+    background:none; cursor:pointer; transition:all 0.15s;
+    font-family:'Barlow',sans-serif;
+  }
+  .btn-del:hover { background:rgba(224,66,58,0.1); }
+
+  .empty-wrap {
+    display:flex; flex-direction:column; align-items:center;
+    justify-content:center; padding:5rem 2rem; text-align:center; gap:1rem;
+  }
+  .empty-wrap h2 { font-family:'Bebas Neue',sans-serif; font-size:2rem; color:#f0eee8; }
+  .empty-wrap p { color:#7e7c8a; }
+
+  @media(max-width:768px) {
+    .htable-wrap { padding:1rem; }
+    .hh { padding:2rem 1rem 1.5rem; }
+    .hh-left h1 { font-size:2.5rem; }
+  }
+</style>
+{% endblock %}
+
+{% block content %}
+
+
+<div class="hw">
+  <div class="hh">
+    <div class="hh-left">
+      <p>Your Entries</p>
+      <h1>HABIT <span>HISTORY</span></h1>
+      {% if entries %}
+      <p class="sub">Showing {{ entries|length }} {{ "entry" if entries|length == 1 else "entries" }}</p>
+      {% endif %}
+    </div>
+    <a href="/log" class="btn-new">+ New Entry</a>
+  </div>
+
+  {% if entries %}
+  <div class="htable-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>Date</th>
+          <th>Sleep</th>
+          <th>Exercise</th>
+          <th>Nutrition</th>
+          <th>Water</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for entry in entries %}
+        <tr>
+          <td class="td-date">
+            <a href="{{ url_for('detail', entry_id=entry.id) }}">
+              {{ entry.date.strftime('%b %d, %Y') }}
+            </a>
+          </td>
+
+          <td>
+            {% set sq = entry.sleep_quality if entry.sleep_quality else 'ok' %}
+            <span class="sleep-pill sleep-{{ sq }}">
+              {{ entry.sleep_hours }}h
+            </span>
+          </td>
+
+          <td>
+            {% set et = entry.exercise_type | lower if entry.exercise_type else 'none' %}
+            {% if et and et != 'none' and et != '' %}
+              <span class="badge-yes">✔ Yes</span>
+              <span class="ex-name">{{ entry.exercise_type | replace(',', ', ') | title }}</span>
+            {% else %}
+              <span class="badge-no">✘ No</span>
+            {% endif %}
+          </td>
+
+          <td>
+            {% if entry.healthy_food %}
+              <span class="badge-yes">✔ Healthy</span>
+            {% else %}
+              <span class="badge-no">✘ No</span>
+            {% endif %}
+            <span class="servings">{{ entry.fruits_veg }} servings</span>
+          </td>
+
+          <td>
+            <span class="water-num {% if entry.water < 4 %}water-low{% elif entry.water >= 8 %}water-great{% else %}water-good{% endif %}">
+              {{ entry.water }}
+            </span>
+            <span class="water-unit">cups</span>
+          </td>
+
+          <td>
+            <div class="act-wrap">
+              <a href="{{ url_for('detail', entry_id=entry.id) }}" class="btn-view">View</a>
+              <a href="{{ url_for('edit_entry', entry_id=entry.id) }}" class="btn-edit2">Edit</a>
+              <form action="{{ url_for('delete_entry', entry_id=entry.id) }}" method="POST" style="display:inline;"
+                    onsubmit="return confirm('Delete this entry?')">
+                <button type="submit" class="btn-del">Delete</button>
+              </form>
+            </div>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+
+  {% else %}
+  <div class="empty-wrap">
+    <h2>No entries yet</h2>
+    <p>Start logging your habits today and watch your progress build up.</p>
+    <a href="/log" class="btn-new">Log Your First Day</a>
+  </div>
+  {% endif %}
+
+</div>
+{% endblock %}
