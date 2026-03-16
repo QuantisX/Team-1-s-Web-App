@@ -1,26 +1,211 @@
-<!-- templates/add_edit.html -->
 {% extends "base.html" %}
+{% block title %}{{ 'Edit Entry' if entry else 'Log Habits' }} — Healthy Habits Tracker{% endblock %}
 
 {% block content %}
-<h1>{{ title }}</h1>
+<section class="page-header">
+  <div class="page-header-inner">
+    <p class="eyebrow">{{ 'Update Your Entry' if entry else 'Daily Check-In' }}</p>
+    <h1 class="page-title">
+      {% if entry %}EDIT <span class="accent-blue">ENTRY</span>
+      {% else %}LOG <span class="accent-red">HABITS</span>{% endif %}
+    </h1>
+    <p class="page-sub">{{ entry.date.strftime('%B %d, %Y') if entry else "Record what you crushed today." }}</p>
+  </div>
+</section>
 
-<form method="POST">
-    <label>Date:</label>
-    <input type="date" name="date" value="{{ entry.date if entry else '' }}" required>
+<section class="form-section">
+  <div class="form-card">
 
-    <label>Gym:</label>
-    <input type="checkbox" name="gym" {% if entry and entry.gym %}checked{% endif %}>
+    {% if error %}<div class="flash flash-error">{{ error }}</div>{% endif %}
 
-    <label>Water (cups):</label>
-    <input type="number" name="water" min="0" value="{{ entry.water if entry else 0 }}">
+    <form method="POST" action="{{ url_for('edit_entry', entry_id=entry.id) if entry else '/log' }}">
 
-    <label>Healthy Food:</label>
-    <input type="checkbox" name="healthy_food" {% if entry and entry.healthy_food %}checked{% endif %}>
+      
+      <div class="form-group">
+        <label class="form-label" for="date">Date <span class="required">*</span></label>
+        <input class="form-input" type="date" id="date" name="date" required
+          value="{{ entry.date.strftime('%Y-%m-%d') if entry else '' }}"
+          {{ 'readonly' if entry else '' }}/>
+        {% if entry %}<p class="form-hint">Date cannot be changed. Delete and re-add to change it.</p>{% endif %}
+      </div>
 
-    <label>Notes:</label>
-    <textarea name="notes">{{ entry.notes if entry else "" }}</textarea>
+      
+      <div class="form-section-label">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+          <path d="M13 8A6 6 0 0 1 3.4 13.2A6 6 0 1 0 13 8Z" fill="#6333b9"/>
+        </svg>
+        Sleep
+      </div>
 
-    <button type="submit">Save</button>
-</form>
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label" for="sleep_hours">Hours slept</label>
+          <div class="water-input-wrap">
+            <button type="button" class="water-btn" onclick="changeNum('sleep_hours', -0.5, 0, 24)">−</button>
+            <input class="form-input water-input" type="number" id="sleep_hours" name="sleep_hours"
+              min="0" max="24" step="0.5"
+              value="{{ entry.sleep_hours if entry else 0 }}"/>
+            <button type="button" class="water-btn" onclick="changeNum('sleep_hours', 0.5, 0, 24)">+</button>
+          </div>
+        </div>
 
+        <div class="form-group">
+          <p class="form-label">Sleep quality</p>
+          <div class="pill-group" id="sleep_quality_group">
+            {% set sq = entry.sleep_quality if entry else 'ok' %}
+            <label class="pill-option {{ 'pill-selected-green' if sq == 'great' else '' }}">
+              <input type="radio" name="sleep_quality" value="great" {{ 'checked' if sq == 'great' else '' }}> Great
+            </label>
+            <label class="pill-option {{ 'pill-selected-yellow' if sq == 'ok' else '' }}">
+              <input type="radio" name="sleep_quality" value="ok" {{ 'checked' if sq == 'ok' else '' }}> OK
+            </label>
+            <label class="pill-option {{ 'pill-selected-red' if sq == 'bad' else '' }}">
+              <input type="radio" name="sleep_quality" value="bad" {{ 'checked' if sq == 'bad' else '' }}> Bad
+            </label>
+          </div>
+        </div>
+      </div>
+
+      
+      <div class="form-section-label">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+          <rect x="1" y="7" width="14" height="3" rx="1.5" fill="#e0423a"/>
+          <rect x="0" y="5" width="4" height="7" rx="1.5" fill="#e0423a"/>
+          <rect x="12" y="5" width="4" height="7" rx="1.5" fill="#e0423a"/>
+        </svg>
+        Exercise
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Workout type <span class="optional">(select all that apply)</span></label>
+        {% set et_list = entry.exercise_type.split(',') if entry and entry.exercise_type else [] %}
+        <div class="type-grid">
+          {% for val, label in [('gym','Gym'),('run','Run'),('walk','Walk'),('yoga','Yoga'),('sports','Sports'),('rest','Rest Day')] %}
+          <label class="type-option {{ 'type-selected' if val in et_list else '' }}">
+            <input type="checkbox" name="exercise_types" value="{{ val }}"
+              {{ 'checked' if val in et_list else '' }}>
+            {{ label }}
+          </label>
+          {% endfor %}
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label" for="exercise_duration">Duration (minutes)</label>
+        <div class="water-input-wrap">
+          <button type="button" class="water-btn" onclick="changeNum('exercise_duration', -5, 0, 300)">−</button>
+          <input class="form-input water-input" type="number" id="exercise_duration" name="exercise_duration"
+            min="0" max="300" step="5"
+            value="{{ entry.exercise_duration if entry else 0 }}"/>
+          <button type="button" class="water-btn" onclick="changeNum('exercise_duration', 5, 0, 300)">+</button>
+        </div>
+      </div>
+
+      
+      <div class="form-section-label">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+          <rect x="2" y="9" width="12" height="5" rx="2.5" fill="#4a8df5"/>
+          <path d="M5 9 Q5 3 8 3 Q11 3 11 9" stroke="#4a8df5" stroke-width="2" fill="none" stroke-linecap="round"/>
+        </svg>
+        Nutrition
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label" for="meals_count">Meals today</label>
+          <div class="water-input-wrap">
+            <button type="button" class="water-btn" onclick="changeNum('meals_count', -1, 0, 99)">−</button>
+            <input class="form-input water-input" type="number" id="meals_count" name="meals_count"
+              min="0" value="{{ entry.meals_count if entry else 0 }}"/>
+            <button type="button" class="water-btn" onclick="changeNum('meals_count', 1, 0, 99)">+</button>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="fruits_veg">Fruits & veggies (servings)</label>
+          <div class="water-input-wrap">
+            <button type="button" class="water-btn" onclick="changeNum('fruits_veg', -1, 0, 99)">−</button>
+            <input class="form-input water-input" type="number" id="fruits_veg" name="fruits_veg"
+              min="0" value="{{ entry.fruits_veg if entry else 0 }}"/>
+            <button type="button" class="water-btn" onclick="changeNum('fruits_veg', 1, 0, 99)">+</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label" for="water">Water intake (cups)</label>
+        <div class="water-input-wrap">
+          <button type="button" class="water-btn" onclick="changeNum('water', -1, 0, 30)">−</button>
+          <input class="form-input water-input" type="number" id="water" name="water"
+            min="0" max="30" value="{{ entry.water if entry else 0 }}"/>
+          <button type="button" class="water-btn" onclick="changeNum('water', 1, 0, 30)">+</button>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <p class="form-label">Healthy Food</p>
+        <label class="toggle-label">
+          <input type="checkbox" name="healthy_food" class="toggle-input"
+            {{ 'checked' if entry and entry.healthy_food else '' }}/>
+          <span class="toggle-track"><span class="toggle-thumb"></span></span>
+          <span class="toggle-text">I ate healthy today</span>
+        </label>
+      </div>
+
+    
+      <div class="form-group">
+        <label class="form-label" for="notes">Notes <span class="optional">(optional)</span></label>
+        <textarea class="form-input form-textarea" id="notes" name="notes"
+          maxlength="300" placeholder="PRs? How did it feel?">{{ entry.notes if entry else '' }}</textarea>
+        <p class="form-hint char-count"><span id="char-count">0</span> / 300</p>
+      </div>
+
+      <div class="form-actions">
+        <button type="submit" class="btn-primary">{{ 'Save Changes' if entry else 'Save Entry' }}</button>
+        <a href="{{ '/history' }}" class="btn-ghost">Cancel</a>
+      </div>
+
+    </form>
+  </div>
+</section>
+
+<script>
+  function changeNum(id, delta, min, max) {
+    const input = document.getElementById(id);
+    const step  = Math.abs(delta);
+    const val   = parseFloat(input.value) || 0;
+    const next  = Math.max(min, Math.min(max, Math.round((val + delta) / step) * step));
+    input.value = next % 1 === 0 ? next : next.toFixed(1);
+  }
+
+  
+  document.querySelectorAll('.pill-option input').forEach(function(input) {
+    input.addEventListener('change', function() {
+      document.querySelectorAll('.pill-option').forEach(function(p) {
+        p.classList.remove('pill-selected-green','pill-selected-yellow','pill-selected-red');
+      });
+      const map = { great: 'pill-selected-green', ok: 'pill-selected-yellow', bad: 'pill-selected-red' };
+      if (map[this.value]) this.parentElement.classList.add(map[this.value]);
+    });
+  });
+
+
+  document.querySelectorAll('.type-option input[type="checkbox"]').forEach(function(input) {
+    input.addEventListener('change', function() {
+      if (this.checked) {
+        this.parentElement.classList.add('type-selected');
+      } else {
+        this.parentElement.classList.remove('type-selected');
+      }
+    });
+  });
+
+  
+  const notes   = document.getElementById('notes');
+  const counter = document.getElementById('char-count');
+  if (notes && counter) {
+    counter.textContent = notes.value.length;
+    notes.addEventListener('input', function() { counter.textContent = this.value.length; });
+  }
+</script>
 {% endblock %}
