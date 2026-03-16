@@ -1,15 +1,121 @@
-<!-- templates/detail.html -->
 {% extends "base.html" %}
+{% block title %}{{ entry.date.strftime('%b %d, %Y') }} — Healthy Habits Tracker{% endblock %}
 
 {% block content %}
-<h1>Entry Details</h1>
+<section class="page-header">
+  <div class="page-header-inner">
+    <p class="eyebrow">Entry Detail</p>
+    <h1 class="page-title">{{ entry.date.strftime('%B %d').upper() }}<span class="accent-red">, {{ entry.date.year }}</span></h1>
+    <p class="page-sub">{{ entry.date.strftime('%A') }}</p>
+  </div>
+</section>
 
-<p><strong>Date:</strong> {{ entry.date }}</p>
-<p><strong>Gym:</strong> {{ "Yes" if entry.gym else "No" }}</p>
-<p><strong>Water:</strong> {{ entry.water }}</p>
-<p><strong>Healthy Food:</strong> {{ "Yes" if entry.healthy_food else "No" }}</p>
-<p><strong>Notes:</strong> {{ entry.notes }}</p>
+<section class="detail-section">
 
-<a href="{{ url_for('home') }}">Back</a>
-<a href="{{ url_for('edit_entry', entry_id=entry.id) }}">Edit</a>
+ 
+  <div class="detail-grid">
+
+    <div class="detail-card card-water">
+      <div class="detail-card-icon" style="color:#4a8df5">
+        <svg width="36" height="36" viewBox="0 0 36 36" fill="none">
+          <path d="M18 4 Q26 14 26 22 A8 8 0 0 1 10 22 Q10 14 18 4Z" fill="currentColor" opacity="0.9"/>
+        </svg>
+      </div>
+      <p class="detail-card-label">Water</p>
+      <p class="detail-card-value" style="color:#4a8df5"><span class="big-number">{{ entry.water }}</span> cups</p>
+    </div>
+
+    <div class="detail-card {{ 'card-success' if entry.gym else 'card-miss' }}">
+      <div class="detail-card-icon">
+        <svg width="36" height="36" viewBox="0 0 36 36" fill="none">
+          <rect x="2" y="15" width="32" height="6" rx="3" fill="currentColor" opacity="0.9"/>
+          <rect x="0" y="11" width="8" height="14" rx="3" fill="currentColor"/>
+          <rect x="28" y="11" width="8" height="14" rx="3" fill="currentColor"/>
+        </svg>
+      </div>
+      <p class="detail-card-label">Gym</p>
+      <p class="detail-card-value">{{ 'Done ✔' if entry.gym else 'Skipped ✘' }}</p>
+    </div>
+
+    <div class="detail-card {{ 'card-success' if entry.healthy_food else 'card-miss' }}">
+      <div class="detail-card-icon">
+        <svg width="36" height="36" viewBox="0 0 36 36" fill="none">
+          <rect x="6" y="20" width="24" height="10" rx="5" fill="currentColor" opacity="0.9"/>
+          <path d="M10 20 Q10 8 18 8 Q26 8 26 20" stroke="currentColor" stroke-width="3.5" fill="none" stroke-linecap="round"/>
+        </svg>
+      </div>
+      <p class="detail-card-label">Healthy Food</p>
+      <p class="detail-card-value">{{ 'Clean ✔' if entry.healthy_food else 'Missed ✘' }}</p>
+    </div>
+
+  </div>
+
+  
+  <div class="detail-extended">
+
+    <div class="ext-card">
+      <p class="ext-label">Sleep</p>
+      <p class="ext-value">{{ entry.sleep_hours }}h
+        <span class="ext-badge
+          {{ 'badge-green' if entry.sleep_quality == 'great' else ('badge-gray' if entry.sleep_quality == 'bad' else 'badge-yellow') }}">
+          {{ entry.sleep_quality }}
+        </span>
+      </p>
+    </div>
+
+    <div class="ext-card">
+      <p class="ext-label">Exercise</p>
+      <p class="ext-value">{{ entry.exercise_type | capitalize }}
+        {% if entry.exercise_duration > 0 %}
+          <span class="ext-sub">{{ entry.exercise_duration }} min</span>
+        {% endif %}
+      </p>
+    </div>
+
+    <div class="ext-card">
+      <p class="ext-label">Meals</p>
+      <p class="ext-value">{{ entry.meals_count }} <span class="ext-sub">today</span></p>
+    </div>
+
+    <div class="ext-card">
+      <p class="ext-label">Fruits & Veggies</p>
+      <p class="ext-value">{{ entry.fruits_veg }} <span class="ext-sub">servings</span></p>
+    </div>
+
+  </div>
+
+  
+  {% set score = (entry.gym | int) + (1 if entry.water >= 8 else 0) + (entry.healthy_food | int) + (1 if entry.sleep_hours >= 7 else 0) + (1 if entry.fruits_veg >= 3 else 0) %}
+  <div class="score-banner">
+    <p class="score-label">Day Score</p>
+    <div class="score-bar-wrap">
+      <div class="score-bar" data-pct="{{ (score / 5 * 100) | int }}"></div>
+    </div>
+    <p class="score-value">{{ score }}/5 goals hit</p>
+  </div>
+
+ 
+  {% if entry.notes %}
+  <div class="notes-block">
+    <p class="notes-label">Notes</p>
+    <p class="notes-text">{{ entry.notes }}</p>
+  </div>
+  {% endif %}
+
+  <div class="detail-actions">
+    <a href="{{ url_for('edit_entry', entry_id=entry.id) }}" class="btn-primary">Edit Entry</a>
+    <a href="{{ '/history' }}" class="btn-ghost">← Back to History</a>
+    <form method="POST" action="{{ url_for('delete_entry', entry_id=entry.id) }}" style="display:inline;"
+          onsubmit="return confirm('Delete this entry?')">
+      <button type="submit" class="btn-danger">Delete</button>
+    </form>
+  </div>
+
+</section>
+
+<script>
+  document.querySelectorAll('.score-bar[data-pct]').forEach(function(el) {
+    el.style.width = el.getAttribute('data-pct') + '%';
+  });
+</script>
 {% endblock %}
