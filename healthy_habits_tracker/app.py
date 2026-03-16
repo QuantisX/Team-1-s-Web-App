@@ -1,5 +1,5 @@
 from flask import Flask, render_template, request, redirect, url_for, flash, session
-from flask_sqlalchemy import SQLAlchemy  # type: ignore
+from flask_sqlalchemy import SQLAlchemy  # ty
 from sqlalchemy.exc import IntegrityError
 from pathlib import Path
 from datetime import date as date_type, timedelta
