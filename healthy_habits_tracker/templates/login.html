@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+{% block title %}Log In — Healthy Habits Tracker{% endblock %}
+
+{% block content %}
+<section class="auth-section">
+  <div class="auth-card">
+
+    <div class="auth-logo">
+      <svg width="48" height="48" viewBox="0 0 48 48" fill="none">
+        <rect width="48" height="48" rx="12" fill="#e0423a"/>
+        <rect x="8" y="21" width="32" height="6" rx="3" fill="white"/>
+        <rect x="4" y="16" width="10" height="16" rx="3" fill="white"/>
+        <rect x="34" y="16" width="10" height="16" rx="3" fill="white"/>
+        <circle cx="24" cy="10" r="5" fill="white"/>
+        <path d="M18 26 L20 37 L24 34 L28 37 L30 26" stroke="white" stroke-width="2.5" stroke-linejoin="round" fill="none"/>
+      </svg>
+    </div>
+
+    <h1 class="auth-title">Welcome back</h1>
+    <p class="auth-sub">Log in to track your habits</p>
+
+    <form method="POST" action="{{ url_for('login') }}" class="auth-form">
+      <div class="form-group">
+        <label class="form-label" for="username">Username</label>
+        <input class="form-input" type="text" id="username" name="username" placeholder="your username" required autocomplete="username"/>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label" for="password">Password</label>
+        <input class="form-input" type="password" id="password" name="password" placeholder="••••••••" required autocomplete="current-password"/>
+      </div>
+
+      <button type="submit" class="btn-primary btn-full">Log In</button>
+    </form>
+
+    <p class="auth-switch">Don't have an account? <a href="{{ url_for('signup') }}">Sign up</a></p>
+  </div>
+</section>
+{% endblock %}
