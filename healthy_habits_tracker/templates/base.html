@@ -1,54 +1,71 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{% block title %}Healthy Habits Tracker{% endblock %}</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>{% block title %}Healthy Habits Tracker{% endblock %}</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+  {% block styles %}{% endblock %}
 </head>
 <body>
-    <nav class="navbar">
-        <div class="nav-brand">
-            <span class="nav-icon">🌿</span>
-            <a href="/">Healthy Habits Tracker</a>
-        </div>
-        <ul class="nav-links">
-            <li><a href="/" class="nav-link">Home</a></li>
-            <li><a href="/log" class="nav-link">Log Habits</a></li>
-            <li><a href="/history" class="nav-link">History</a></li>
-        </ul>
-    </nav>
 
-    <main class="container">
-        {% with messages = get_flashed_messages(with_categories=true) %}
-            {% if messages %}
-                {% for category, message in messages %}
-                    <div class="alert alert-{{ category }}">{{ message }}</div>
-                {% endfor %}
-            {% endif %}
-        {% endwith %}
+  <!-- ── NAVBAR ── -->
+  <nav class="navbar">
+    <a href="/" class="nav-logo">
+      <svg width="32" height="32" viewBox="0 0 32 32" fill="none">
+        <rect width="32" height="32" rx="7" fill="#e0423a"/>
+        <rect x="5" y="14" width="22" height="4" rx="2" fill="white"/>
+        <rect x="2" y="11" width="6" height="10" rx="2" fill="white"/>
+        <rect x="24" y="11" width="6" height="10" rx="2" fill="white"/>
+        <circle cx="16" cy="7" r="3.5" fill="white"/>
+        <path d="M12 17 L13.5 25 L16 23 L18.5 25 L20 17" stroke="white" stroke-width="1.8" stroke-linejoin="round" fill="none"/>
+      </svg>
+      HHT
+    </a>
 
-        {% block content %}{% endblock %}
-    </main>
+    <ul class="nav-links">
+      <li><a href="/"         class="{{ 'active' if request.path == '/' }}">Home</a></li>
+      <li><a href="/history"  class="{{ 'active' if request.path == '/history' }}">History</a></li>
+      <li><a href="/log"      class="{{ 'active' if request.path == '/log' }}">Log Habits</a></li>
+      <li><a href="/stats"    class="{{ 'active' if request.path == '/stats' }}">Stats</a></li>
+    </ul>
 
-    <footer class="footer">
-        <p>&copy; 2026 Healthy Habits Tracker &mdash; Built with Flask 🌱</p>
-    </footer>
+    <div class="nav-auth">
+      {% if session.get('user') %}
+        <span class="nav-user">{{ session['user'] }}</span>
+        <a href="/logout" class="btn-nav-ghost">Log out</a>
+      {% else %}
+        <a href="/login"  class="btn-nav-ghost">Log in</a>
+        <a href="/signup" class="btn-nav-red">Sign up</a>
+      {% endif %}
+    </div>
+  </nav>
 
-    <script>
-        /* ---- ISSUE 21: Delete confirmation ---- */
-        document.addEventListener("DOMContentLoaded", function () {
-            document.querySelectorAll(".btn-delete").forEach(function (btn) {
-                btn.addEventListener("click", function (e) {
-                    var date = btn.getAttribute("data-date") || "this entry";
-                    if (!confirm("Are you sure you want to delete the entry for " + date + "?")) {
-                        e.preventDefault();
-                    }
-                });
-            });
-        });
-    </script>
+  <!-- ── FLASH MESSAGES (Issue 17) ── -->
+  {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+      <div class="flash-container">
+        {% for category, message in messages %}
+          <div class="flash flash-{{ category }}">
+            <span>{{ message }}</span>
+            <button class="flash-close" onclick="this.parentElement.remove()">✕</button>
+          </div>
+        {% endfor %}
+      </div>
+    {% endif %}
+  {% endwith %}
 
-    {% block scripts %}{% endblock %}
+  <!-- ── PAGE CONTENT ── -->
+  <main>
+    {% block content %}{% endblock %}
+  </main>
+
+  <footer class="site-footer">
+    <p>© 2026 Healthy Habits Tracker · Team 1</p>
+  </footer>
+
 </body>
 </html>
