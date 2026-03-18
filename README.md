@@ -8,7 +8,7 @@ A Flask web application built as a school group project to help users track dail
 
 | Name | Role |
 |------|------|
-| Quantis | Lead Dev / Repo Manager |
+| Quantis | Database / Repo Manager |
 | Elida | Frontend / Full Stack |
 | Thaina | Styling (CSS / UX) |
 | Anthony | Frontend (HTML) |
